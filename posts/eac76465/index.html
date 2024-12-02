@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  
+  <script type="text/javascript"
+  color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #FFFFFF; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Yuji Mai:300,300italic,400,400italic,700,700italic|Secular One:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-atom.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yangkunlin.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":360,"dimmer":true,"display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+
+  <meta name="description" content="调研过程的概念辨析Procedural Content Generation(PCG)PCG 是 Procedural Content Generation 的缩写，中文通常翻译为程序化内容生成。它是一种通过算法和规则自动生成内容的技术，广泛应用于游戏开发、虚拟世界构建、影视制作等领域。简单来说就是使用算法创建数据而不是手动创建数据，这些数据是在运行的时候生成。在计算机图形学中，它通常用于创建纹理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="世界模型调研概念辨析">
+<meta property="og:url" content="http://yangkunlin.cn/posts/eac76465/index.html">
+<meta property="og:site_name" content="Kunlin&#39;s blog">
+<meta property="og:description" content="调研过程的概念辨析Procedural Content Generation(PCG)PCG 是 Procedural Content Generation 的缩写，中文通常翻译为程序化内容生成。它是一种通过算法和规则自动生成内容的技术，广泛应用于游戏开发、虚拟世界构建、影视制作等领域。简单来说就是使用算法创建数据而不是手动创建数据，这些数据是在运行的时候生成。在计算机图形学中，它通常用于创建纹理">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Dragon_trees.jpg/290px-Dragon_trees.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241128213351251.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241128221828447.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241129145218349.png">
+<meta property="article:published_time" content="2024-11-29T22:21:18.000Z">
+<meta property="article:modified_time" content="2024-12-02T13:54:40.850Z">
+<meta property="article:author" content="杨坤霖Kunlin">
+<meta property="article:tag" content="人工智能前沿">
+<meta property="article:tag" content="世界模型">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Dragon_trees.jpg/290px-Dragon_trees.jpg">
+
+<link rel="canonical" href="http://yangkunlin.cn/posts/eac76465/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>世界模型调研概念辨析 | Kunlin's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Kunlin's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kunlin's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">科学·自由·民主</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/yangkunl" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yangkunlin.cn/posts/eac76465/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="杨坤霖Kunlin">
+      <meta itemprop="description" content="不要温和地走进那个良夜。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kunlin's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          世界模型调研概念辨析
+        </h1>
+
+        <div class="post-meta">
+          
+              <i class="fa fa-thumb-tack"></i>
+              <font color=7D26CD>置顶</font>
+              <span class="post-meta-divider">|</span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-29 22:21:18" itemprop="dateCreated datePublished" datetime="2024-11-29T22:21:18+00:00">2024-11-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-02 13:54:40" itemprop="dateModified" datetime="2024-12-02T13:54:40+00:00">2024-12-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E6%B2%BF%E6%8A%80%E6%9C%AF%E6%8E%A2%E7%B4%A2/" itemprop="url" rel="index"><span itemprop="name">前沿技术探索</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>28 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="调研过程的概念辨析"><a href="#调研过程的概念辨析" class="headerlink" title="调研过程的概念辨析"></a>调研过程的概念辨析</h1><h2 id="Procedural-Content-Generation-PCG"><a href="#Procedural-Content-Generation-PCG" class="headerlink" title="Procedural Content Generation(PCG)"></a>Procedural Content Generation(PCG)</h2><p><strong>PCG</strong> 是 <strong>Procedural Content Generation</strong> 的缩写，中文通常翻译为程序化内容生成。它是一种通过<strong>算法和规则自动生成内容的技术</strong>，广泛应用于游戏开发、虚拟世界构建、影视制作等领域。简单来说就是使用算法创建数据而不是手动创建数据，这些数据是在运行的时候生成。在计算机图形学中，它通常用于创建纹理和 3D 模型。在视频游戏中，它用于自动创建大量游戏内容。其最初是由于硬件性能的限制，通过在运行过程中生成来减少游戏的大小等。根据实现方式，程序生成的优势可能包括更小的文件大小、更多的内容以及随机性，以实现更不可预测的游戏玩法。</p>
+<span id="more"></span>
+<p><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Dragon_trees.jpg/290px-Dragon_trees.jpg" alt="img"></p>
+<blockquote>
+<p>一个过程生成的例子，这里使用 L 系统生成逼真的树木模型。通过改变确定性和随机种子，可以生成不同的模型。</p>
+</blockquote>
+<h2 id="构建生态解决PCG范围"><a href="#构建生态解决PCG范围" class="headerlink" title="构建生态解决PCG范围"></a>构建生态解决PCG范围</h2><p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241128213351251.png" alt="image-20241128213351251"></p>
+<p>这里的类HuggingFace，其实是指像Huggingface或者Github或者DokerHub一样有完善的开源生态，也就有人源源不断地上传相应的PCG模块，来解决PCG功能单一的问题。同时利用LLM将需要复杂PCG能力的任务拆分成子任务，这样通过相应的PCG组合达到多样化的目的。</p>
+<h2 id="PCG-Hub"><a href="#PCG-Hub" class="headerlink" title="PCG Hub"></a>PCG Hub</h2><p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241128221828447.png" alt="image-20241128221828116"></p>
+<p>没找到但是大概可以理解就是有大量PCG模块的一个Hub，貌似来源于这篇文章<a target="_blank" rel="noopener" href="https://simg.baai.ac.cn/paperfile/29268b5d-e309-4c5a-b8f8-dedecb96c741.pdf">CityX: Controllable Procedural Content Generation for Unbounded 3D Cities</a>。</p>
+<p>由于有标准的Agent可以理解的文档，因此可以使用LLM进行交互。</p>
+<h1 id="Neural-radiance-field-（NeRF）"><a href="#Neural-radiance-field-（NeRF）" class="headerlink" title="Neural radiance field （NeRF）"></a>Neural radiance field （NeRF）</h1><p>神经辐射场（NeRF）<strong>是一种基于深度学习的从二维图像重建场景三维表示的方法</strong>。NeRF 算法将场景表示为深度神经网络（DNN）参数化的辐射场。该网络预测给定相机在欧拉角（θ，Φ）中的空间位置（x，y，z）和观察方向下的体积密度和视依赖发射辐射。通过沿相机射线采样许多点，传统的体积渲染技术可以生成图像。</p>
+<ul>
+<li><strong>数据收集</strong>：一个 NeRF 需要为每个独特的场景重新训练。第一步是从不同角度收集场景的图像及其相应的相机姿态。这些图像是标准的 2D 图像，不需要专门的相机或软件。任何相机都能生成数据集，只要设置和捕获方法符合 SfM（从运动结构）的要求。</li>
+<li><strong>训练</strong>：对于每个稀疏视点（图像和相机姿态）提供的信息，通过场景中的相机光线进行行进，生成一组具有给定辐射方向（进入相机）的 3D 点。对于这些点，使用多层感知器（MLP）预测体积密度和发出的辐射。然后通过经典体积渲染生成图像。因为此过程完全可微分，可以通过多个视点的梯度下降来最小化预测图像与原始图像之间的误差，鼓励 MLP 发展一个连贯的场景模型。</li>
+</ul>
+<h2 id="PCG-via-LLMs"><a href="#PCG-via-LLMs" class="headerlink" title="PCG via LLMs"></a>PCG via LLMs</h2><p>程序可控生成（PCG）是一种创建可扩展高质量资产的高效技术，但它对普通用户来说并不友好，因为它需要深厚的领域专业知识。为了解决这些问题，我们采用了大型语言模型（LLM）来驱动程序建模。</p>
+<p>前者包括大量可访问的程序资产和数以千计的手工 API 文档。后者旨在为 Blender 生成可执行的操作，以便在用户指令的指导下制作出可控且精确的 3D 资产。</p>
+<p>我们的 SceneX 可以生成一个跨度为 2.5 km × 2.5 km、布局和几何结构精细的城市，大大降低了时间成本，从专业 PCG 工程师的数周时间缩短到普通用户的几小时。</p>
+<p>广泛的实验证明了我们的方法在可控的大规模场景生成和编辑方面的能力，包括资产放置和季节转换。</p>
+<p>尽管之前的方法取得了可喜的成果，但由于使用三维基元（如点云或辐射场）的场景表示与工业流水线不兼容，因此在工业级应用方面仍存在很大差距。为了弥补这一差距，我们采用了程序建模技术，这是一种快速创建高质量 3D 资产的先进技术。它可以利用 Blender 等软件，通过可调参数和基于规则的系统[32]，在自然场景中生成逼真而复杂的 3D 资产。</p>
+<p>例如，Infinigen [42] 提出了一种程序生成器，它结合了不同的程序建模算法，可生成包括地形、天气、植被和野生动物在内的大规模自然场景。[33]、[5]和[46]使用程序建模生成城市级别的街道或布局。这些程序方法可在对象、场景和城市层面生成高质量的 3D 资产。然而，对程序建模的生成规则、算法框架和单个参数的全面掌握使得生成过程对初学者不友好，而且耗时较长，尤其是在大规模场景或城市生成方面。例如，生成图 1 所示的纽约市，就需要专业的 PCG 工程师工作两周以上。此外，由于用户的学习曲线较长，使用程序建模生成大型场景的难度很大。为解决上述问题，3D-GPT [45] 和 SceneCraft [19] 等现有作品通过整合 LLM 代理和程序生成软件，引入了一种指令驱动的 3D 建模方法。尽管这些方法成功地与人类设计师合作建立了程序生成框架，但仍然存在很大的局限性。首先，与程序生成法相比，SceneCraft 无法实现细粒度的三维资产编辑，因为固定的三维资产具有不可编辑的特性。其次，SceneCraft 和程序生成方法都无法实现对三维资产的精细编辑、3D-GPT 基于参数化程序生成模型 Infinigen，这限制了其充分利用现有 PCG 资源的能力。此外，它还无法生成高质量的大型场景，尤其是广阔的地形和无边无际的城市。最后，由于受到提示表达式的限制，资产的多样性也受到了限制。</p>
+<p>为了解决这些问题，我们提出了一个具有启发性的大规模场景生成框架 SceneX，它可以根据设计者的文字描述自动生成高质量的场景。通过引入 PCGBench，我们收集了大量可访问的程序资产，包括各种地形、城市和动植物等自然物体。这有助于我们生成多样、逼真和实用的大型场景。此外，我们还构建了数以千计的 API 参数文档，用于制定代理计划程序并提供定量评估。受现有 LLM 驱动规划方法 [28,44,49,51] 的启发，我们开发了一个 PCGPlanner 框架，用于生成与 Blender 相连接的正确 API 操作，从而在用户指令的指导下自动生成可控且精确的 3D 资产。这种基于 LLM 的自动化解决方案大大提高了场景生成的效率，降低了程序化场景建模的学习曲线，并实现了目标场景的定制化创建。除了程序建模的固有优势（如逼真和真实的几何图形）外，我们的 SceneX 还具有几个关键特性：</p>
+<p>效率：得益于所提出的 PCGBench 和 PCGPlanner，我们的 SceneX 可以快速生成大量高质量的 3D 资产，包括地形、城市和森林。此外，我们只需要几个小时就能生成一个大型城市，而专业设计师则需要两周以上的时间。</p>
+<p>可控性：SceneX 可以生成满足个性化需求的 3D 场景。例如，我们可以根据相应的描述实现场景编辑，如添加对象、在某个位置放置对象、平移季节等。</p>
+<p>多样性：SceneX 打破了特定生成算法和预定义规则的限制，利用先进的语言模型技术实现了更加灵活和多样化的大规模场景生成。具体来说，我们可以生成自然界中的大型地形，如沙漠、湖泊、森林和山脉；也可以生成现实世界中的高品质城市，如纽约、巴黎和东京；还可以生成各种物体，包括植物、动物和建筑物。</p>
+<p>近年来，三维资产生成技术突飞猛进，它结合了计算机图形学和计算机视觉的思想，实现了三维内容的自由创建。目前，三维资产生成方面的主要研究集中在创建单个对象[8,30,35,39]、三维头像[18,25,27,58]和三维场景[11,16,59,61,62]。其中，ZeroShot123 [35]提出了一种基于扩散模型的方法，该方法实现了目标的三维模型基于图片。DreamFusion [39] 提出了一种基于 NeRF 的方法，可让模型根据输入文本生成相应的 3D 模型。</p>
+<p>与单个物体的生成相比，大尺度场景的生成，包括自然地貌[9, 15, 34]和无边界城市[29,31,52]的生成，在元宇宙和游戏制作中无疑更具实用性和挑战性。</p>
+<p>这些基于学习的方法没有几何结构，因此难以直接应用于 UE 等虚拟引擎。例如，尽管 InfiniCity [31] 和 CityDreamer [52] 可以生成视觉上吸引人的城市场景，但由于缺乏清晰的几何图形，在实际应用中可能会出现问题，如物体相交和空间不连续性。</p>
+<p>研究人员利用程序内容生成（PCG）技术，对自然场景[12,60]和城市场景[33,46,48,54]的程序生成进行了深入研究。</p>
+<p>它采用数学算法生成街区和街道，并利用追尾技术生成建筑物的几何形状。</p>
+<p>虽然这些传统的计算机制图方法可以生成高质量的三维数据，但所有参数都必须预先输入到程序生成过程中。功能单一且由此产生的三维数据受规则限制，与真实世界存在一定程度的偏差。</p>
+<p>Infinigen [42] 引入了一种程序化生成逼真三维自然物体和场景的技术。这种方法有助于以编程方式生成所有资产，并通过随机数学算法生成网格和纹理。虽然 Infinigen 可以生成无限真实的资产，但用户无法根据自己的具体要求定制生成的结果。因此，我们提出了一种更方便的程序生成方法，以生成高质量的三维资产。</p>
+<p>研究人员利用隐藏在大型语言模型（LLMs）中的知识[1, 3, 10, 26,41]，探索 LLMs 以解决典型语言处理领域以外的复杂任务。这些任务包括数学推理[22, 50]、医学[23, 53]和规划[14, 20, 21, 57]等领域。凭借强大的推理和概括能力，LLM 可作为不同任务的实践规划者。例如，[20] 利用互联网上 LLMs 丰富的领域知识及其新兴的零点规划能力来执行复杂的任务规划和推理。研究了 LLM 在涉及多代理协调的场景中的应用，涵盖了一系列不同的任务目标。[56] 提出了一个模块化框架，通过多个大型预训练模型之间的提示，采用结构化对话。</p>
+<p>针对特定应用的专用 LLM 已经得到了探索，例如用于视觉感知任务的 HuggingGPT [44]、用于多模态理解的 VisualChatGPT [51]、Voyager [49] 和 [63]、用于办公软件的 SheetCopilot [28]，以及用于 Python 代码生成的 Codex [6]。受现有工作的启发，我们探索将 LLM 代理应用于 PCG 软件，如 Blender，以提供自动 3D 资产生成功能。</p>
+<blockquote>
+<p>HuggingGPT 是一个由大型语言模型（LLM）驱动的代理，旨在将多种 AI 模型连接起来，帮助解决机器学习社区中的各种 AI 任务。它结合了诸如 ChatGPT 等 LLM 和多个专家模型，以实现更高效的协作。</p>
+</blockquote>
+<p>提出的 SceneX 框架包含两个主要组件：PCGBench 和 PCGPlanner。</p>
+<p>PCGBench 是一个大型数据集，其中包含程序建模方面的各种资源，可用作资产库并评估生成性能。具体来说，它包括从互联网上收集插件和资产、资产注释以及手工制作 API 文档。在 PCGBench 的基础上，我们提出了一个新颖的 PCGPlanner 框架，用于使用 PCG 和预定义模型自动生成 3D 场景。该框架包括任务规划阶段、资产检索阶段和由具有自定义指令的代理引导的行动执行阶段。通过 PCGBench 和新颖的 PCGPlanner 代理之间的合作，SceneX 被赋予了高效、可控地生成各种高质量场景的能力。</p>
+<p>动作 API 包括原始 API 和用于控制资产生成的详细参数。具体来说，我们总共收集了 1532 个单独的原始 API，涉及场景生成任务的各个方面，如控制生成资产的位置、颜色、大小和高度。每个动作函数都包含多个原始 API，并带有相应的参数，可生成完整的 3D 资产。</p>
+<p>例如，为了生成图 2 所示的三维树，我们定义了两个单独的操作函数，如 tree_mesh_generate 和 tree_material_generate。每个函数都由多个原始 API 组成，并带有相应的参数，如 TreeHight（树高）、CrownDensity（树冠密度）、LeafDensity（树叶密度）等。这些参数可以在操作输入中进行操作，我们可以通过更改这些参数生成各种树木。</p>
+<p>为了实现在人类指令指导下可控地生成三维模型，我们应该制定大型语言模型（LLM）的动作函数、这也是前人的研究成果[6, 45, 49]。为此，我们编译了大量动作函数指导文档（API Documents），以便为 LLM 部署我们的函数。此外，我们还提供了所有参数名称及其可能值的全面记录。详见图 2。</p>
+<p>在资产收集方面，我们精心策划了一个庞大的 3D 数据集，其中包括 1,908 个精雕细琢的模型和 1,294 种纹理。该数据集种类繁多，包括建筑物、植物、城市基础设施以及从广袤的互联网上收集的纹理。这些现有资产为三维场景生成提供了另一种解决方案，即检索现有的单个程序模型，而不是逐步生成，这可以显著提高创建大型场景的效率。在检索方面，我们使用了 CLIP [40] 编码器功能，实现了文本到文本检索和文本到图像检索。因此，我们还通过为每个三维资产渲染图片的方式，为收集到的三维资产提供丰富的注释。<img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241129145218349.png" alt="image-20241129145218349"></p>
+<p>为了实现 LLM 驱动的资产生成，我们引入了 PCG Planner Agents 的层次结构，它由多个代理组成，可以根据用户的文本描述自动生成高质量的大型场景。根据以往的研究成果 [6,44,49,51]，我们设计的模块包括三个主要阶段：任务规划、资产检索和行动执行。在任务规划阶段，将引入一对顺序规划代理来处理用户查询并输出详细的子任务列表。然后，为了将子任务与 PCGBench 精确连接，我们会检索任务列表中提到的操作和资产。最后，执行代理利用注释的动作应用程序接口来处理程序生成或资产操作的子任务。</p>
+<p>为了让 LLM 具备像专家一样进行场景建模的能力，我们引入了一个系统模板，以提示作为代理的 LLM 完成场景建模任务中的子任务。对于每个代理，提示 P 具有类似的结构，定义为 Pi(Ri,Ti,Di,Fi,Ei)，其中 i∈{dispatch, specialist, retrieval, execution} 区分了代理的职责。提示的构成要素定义如下：</p>
+<p>每个代理都有一个特定的角色 R，它描述了代理在场景生成过程中的职责。在场景生成任务中，通常需要来自不同模块的多个动作 API。不同的 API</p>
+<p>需要按顺序调用。因此，正确安排不同模块和应用程序接口之间的功能至关重要。为了确保有能力处理各种场景生成任务并克服令牌限制，我们提出了一个两阶段迭代任务规划器，由一个调度代理和一个专家代理组成，如图 3 所示。调度代理 调度代理是第一个接收用户对目标场景描述的代理，负责从句子中提取信息。它充当计划者的角色，将用户的意图解释为一个粗略的计划，并列出输入指令中提到的所有对象。同时，用户可能会在描述中遗漏一些常见的背景物体，代理会自动将这些物体添加到粗略计划中。在知识文档 Ddispatch 中描述了场景的详细对象要求及其模块对应原则。我们对调度代理进行了如下表述：</p>
+<p>其中 q 代表用户输入，oi 代表粗略计划中列出的对象，以 { 模块：对象名称｝</p>
+<p>专家代理 然后，专家代理开始制定进一步的详细计划。在这一阶段，专家代理作为专业设计师，能够对粗略计划中给出的对象进行详细规划。根据对象的模块类别，专家代理会收到相应的知识文档 Dspecialist ⊂ D，其中 Dspecialist 包含每个模块的生成机制和解释。专家代理将每个粗略计划分解为包含若干子任务的详细计划，其中每个子任务对应一个可执行的应用程序接口或一个需要导入的资产</p>
+<p>根据专家代理给出的详细计划，我们需要在 PCGBench 中搜索要执行的合适 API 或要导入的资产。为了精确检索，我们提出了一个检索代理，它能识别子任务类型的目标是资产还是应用程序接口。通过 “预检索”（Pretrieval）提示，该代理还被指示输出一个描述，作为资产或应用程序接口的搜索索引。然后，该描述将被编码为用于检索的嵌入。在这里，我们使用预先训练好的 CLIP [40] 分别通过文本到文本检索和文本到图像检索来搜索我们的动作 API 和 3D 模型。如图 2 右侧所示，我们将 PCGBench 中每个资产的渲染图像编码成归一化的 768 维向量，然后与输入的描述嵌入进行比较。从五个最相似的结果中随机选择一个作为结果，并导入到 Blender 场景中。通过余弦距离计算相似度，选出匹配度最高的结果。</p>
+<p>在 PCGBench 中，每个动作 API 都以 Python 函数的形式定义，并带有多个预定义参数。获得 α 后，我们需要对这些初始参数进行自定义修改，以满足任务描述的要求。对于每个 API α，都有一个传入提示 Pspecialist 的知识文档 Dα∈ D。如图 2（a）所示，每个动作 API 的知识文档都以 JSON 格式记录，并具有相同的架构。以 tree_mesh_generate API 为例，函数中的每个参数都在 tree_mesh_doc = {“类型”：”tree mesh”，”Description”：”生成树状网格的函数”, “Function API”：”tree_mesh_generate”，”参数信息”：{“可能的值”：(高”、”中”、”低”）, …}}.执行代理可以表示为</p>
+<p>为了实现 LLM 驱动的资产生成，我们引入了 PCG Planner Agents 的层次结构，它由多个代理组成，可以根据用户的文本描述自动生成高质量的大型场景。</p>
+<p>任务规划、资产检索、行动执行，在任务规划阶段，将引入一对顺序规划代理来处理用户查询，并输出详细的子任务列表。然后，为了将子任务与 PCGBench 精确连接，我们会检索任务列表中提到的操作和资产。最后，执行代理利用注释的动作应用程序接口来处理程序生成或资产操作的子任务。</p>
+<p>Agent construction：</p>
+<p>在每个步骤中，代理都会根据其任务得到一份知识文档的提示。我们将 D 表示为包含 PCGBench 中预定义的所有知识文档的集合</p>
+<p>F denoted as the output format for each agent. To precisely and concisely convey information between agents, the output format of each agent is strictly defined.</p>
+<p>为确保能够胜任各种场景生成任务并克服标记限制，我们提出了一个两阶段迭代任务规划器，由一个调度代理和一个专家代理组成，如图 3 所示。</p>
+<p>调度代理 调度代理是第一个接收用户对目标场景描述的代理，负责从句子中提取信息。</p>
+<p>它作为一个规划器，将用户意图解释为一个粗略的计划，并列出输入指令中提到的所有对象。同时，用户可能会在描述中遗漏一些常见的背景对象，代理会自动将这些对象添加到粗略计划中。在知识文档 Ddispatch 中描述了场景的详细对象要求及其模块对应原则。我们对调度代理进行了如下表述：</p>
+<p>然后，启动专家代理，制定进一步的详细计划。在这一阶段，专业代理人充当专业设计师的角色，能够为粗略规划中给出的对象提供详细规划。根据对象的模块类别，专家代理会收到相应的知识文档 Dspecialist ⊂ D，其中 Dspecialist 包含每个模块的生成机制和解释。专家代理将每个粗略计划分解为包含若干子任务的详细计划，其中每个子任务对应一个可执行的应用程序接口或一个要导入的资产</p>
+<p>where sj stands for one of the sub-tasks to be completed</p>
+<p>根据专家代理给出的详细计划，我们需要在 PCGBench 中搜索要执行的合适 API 或要导入的资产。为了精确检索，我们提出了一个检索代理，它能识别子任务类型的目标是资产还是应用程序接口。通过 “预检索”（Pretrieval）提示，该代理还被指示输出一个描述，作为资产或应用程序接口的搜索索引。然后，该描述将被编码为用于检索的嵌入。在这里，我们使用预先训练好的 CLIP [40] 分别通过文本到文本检索和文本到图像检索来搜索我们的动作 API 和 3D 模型。如图 2 右侧所示，我们将 PCGBench 中每个资产的渲染图像编码成归一化的 768 维向量，然后与输入的描述嵌入进行比较。从五个最相似的结果中随机选择一个作为结果，并导入到 Blender 场景中。通过余弦距离计算相似度，选出匹配度最高的结果。</p>
+<p>使用计算机图形学构建世界模型涉及多种先进技术和方法，旨在创建逼真的三维环境和物体表示。以下是基于所提供资源的详细综述。</p>
+<h3 id="构建世界模型的关键方面"><a href="#构建世界模型的关键方面" class="headerlink" title="构建世界模型的关键方面"></a>构建世界模型的关键方面</h3><ol>
+<li><p><strong>概念与定义</strong>：<br>世界模型是一种复杂的结构，用于表示和交互三维环境，支持游戏、虚拟现实（VR）、机器人技术和城市规划等多种应用<a target="_blank" rel="noopener" href="https://a16z.com/announcement/investing-in-world-labs/">^1</a> <a target="_blank" rel="noopener" href="https://www.pymnts.com/news/investment-tracker/2024/world-labs-raises-230-million-to-build-spatially-intelligent-ai/">^6</a>。随着人工智能（AI）和机器学习等技术的进步，创建能够以完整3D形式呈现真实或想象场所的模型已成为研究重点。</p>
+</li>
+<li><p><strong>三维建模技术</strong>：  </p>
+<ul>
+<li><strong>运动结构（SfM）</strong>：这种方法利用从不同角度拍摄的多张2D图像来重建3D结构。通过识别不同图像中的共同特征，SfM可以生成详细的点云或网格模型<a target="_blank" rel="noopener" href="https://viso.ai/computer-vision/3d-computer-vision/">^7</a>。  </li>
+<li><strong>激光雷达（LiDAR）</strong>：一种通过发射光脉冲并分析反射信号来测量距离的遥感方法。这种技术能够提供高度精确的空间数据，是3D建模的关键工具<a target="_blank" rel="noopener" href="https://www.nextechar.com/blog/3d-modeling-in-gaming-industry">^5</a> <a target="_blank" rel="noopener" href="https://viso.ai/computer-vision/3d-computer-vision/">^9</a>。  </li>
+<li><strong>摄影测量</strong>：利用照片创建3D模型的技术，因其能够从现实物体中制作精确表示而备受青睐<a target="_blank" rel="noopener" href="https://shairozsohail.medium.com/generating-3d-models-with-deep-learning-part-1-917cc4757143">^4</a>。</li>
+</ul>
+</li>
+<li><p><strong>工具与软件</strong>：<br>各种3D建模软件在这一过程中起着重要作用：  </p>
+<ul>
+<li><strong>Blender</strong>：一款开源软件，因其在建模、动画和渲染方面的多功能性而备受欢迎<a target="_blank" rel="noopener" href="https://www.fiverr.com/resources/guides/graphic-design/what-is-3d-modeling">^10</a>。  </li>
+<li><strong>Autodesk Maya 和 3ds Max</strong>：电影和游戏开发行业的标准工具，尤其适用于创建复杂动画和视觉效果<a target="_blank" rel="noopener" href="https://www.fiverr.com/resources/guides/graphic-design/what-is-3d-modeling">^10</a>。  </li>
+<li><strong>SketchUp</strong>：以其用户友好的界面和参数化建模能力而闻名，主要用于建筑和设计领域<a target="_blank" rel="noopener" href="https://www.fiverr.com/resources/guides/graphic-design/what-is-3d-modeling">^10</a>。</li>
+</ul>
+</li>
+<li><p><strong>应用领域</strong>：<br>详细的3D世界模型的应用非常广泛：  </p>
+<ul>
+<li><strong>游戏</strong>：在游戏中，3D模型对于创建角色设计、环境和交互对象以增强玩家沉浸感至关重要<a target="_blank" rel="noopener" href="https://www.nextechar.com/blog/3d-modeling-in-gaming-industry">^6</a>。  </li>
+<li><strong>虚拟现实</strong>：沉浸式VR体验依赖于精确设计的3D模型，这些模型能够模拟现实世界的物理特性和环境<a target="_blank" rel="noopener" href="https://www.nextechar.com/blog/3d-modeling-in-gaming-industry">^6</a>。  </li>
+<li><strong>城市与环境规划</strong>：3D城市模型有助于模拟环境条件、分析城市设计的影响，并促进智慧城市规划的实施<a target="_blank" rel="noopener" href="https://www.gim-international.com/content/article/state-of-the-art-in-3d-city-modelling-2">^9</a>。</li>
+</ul>
+</li>
+<li><p><strong>挑战</strong>：<br>尽管技术不断进步，但仍存在一些挑战，包括数据一致性、模型精度以及不同3D建模软件和标准之间实现互操作性的问题<a target="_blank" rel="noopener" href="https://www.gim-international.com/content/article/state-of-the-art-in-3d-city-modelling-2">^9</a>。</p>
+</li>
+</ol>
+<h3 id="未来方向"><a href="#未来方向" class="headerlink" title="未来方向"></a>未来方向</h3><p>构建世界模型的未来趋势表明，将越来越多地集成AI以自动化和增强建模过程。像World Labs这样的公司正致力于创建交互式3D世界，使用户能够无缝探索和操控环境<a target="_blank" rel="noopener" href="https://a16z.com/announcement/investing-in-world-labs/">^1</a> <a target="_blank" rel="noopener" href="https://www.pymnts.com/news/investment-tracker/2024/world-labs-raises-230-million-to-build-spatially-intelligent-ai/">^6</a>。  </p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>构建3D世界模型是一个快速发展的领域，它结合了艺术技能与复杂的技术工具。随着技术的进步，实时数据和AI的整合将进一步增强虚拟环境的真实性和交互性，为各行业的创新应用铺平道路。  </p>
+<p>如需进一步阅读，您可以探索以下文章：  </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://worldlabs.ai/">World Labs</a>撰写的《构建由AI驱动的交互式世界》。</li>
+</ul>
+<p>这篇综述全面概括了当前计算机图形学领域中世界建模的实践与未来发展方向。</p>
+<p>人类智慧有许多方面。其中之一是语言智能，使我们能够通过语言与他人沟通和联系。但也许更基本的是空间智能，它使我们能够理解和与世界周围的事物互动。空间智能还帮助我们创造，将心中的图像带入现实世界。我们用它来推理、移动和发明——将任何从简陋的沙堡到高耸的城市可视化并设计出来。</p>
+<p>我们相信人工智能将帮助人类建设更美好的世界。进步迅速，但我们只看到了生成式 AI 革命的序章。到目前为止，语言催化了这一激动人心的早期时刻，文本提示的图像和视频模型与大型语言模型（LLMs）一同崛起，预示着 AI 在视觉领域的潜力。这些模型已经使人们能够以新的方式工作和创造；但它们只是触及了可能性的表面。要超越今天模型的局限性，我们需要能够模拟世界并对三维空间和时间中的物体、地点和交互进行推理的空间智能 AI。</p>
+<p>今天，我们宣布成立世界实验室：一家构建大型世界模型（LWMs）的空间智能 AI 公司，以感知、生成和与 3D 世界互动。我们的目标是把 AI 模型从像素的 2D 平面提升到完整的 3D 世界——无论是虚拟的还是现实的——赋予它们与我们一样丰富的空间智能。人类的空间智能经过数千年的进化；但在这一非凡进步的时代，我们看到在近期内赋予 AI 这种能力的机会。</p>
+<p>朝着这个目标，World Labs 将开发能够从图像和其他模态中理解和推理 3D 世界的空间智能大型世界模型（LWMs）。随着时间的推移，我们预计将训练出越来越强大的模型，这些模型具有更广泛的能力，可以应用于各种领域，并与人类并肩工作。</p>
+<p>最初，我们将专注于生成无限制的 3D 世界 - 创建和编辑包含物理、语义和控制功能的虚拟空间。我们希望这将解锁创意用户和专业人士（如艺术家、设计师、开发人员和工程师）的新能力。它还将允许任何人想象和创造自己的世界，将生成式 AI 从 2D 图像和视频扩展到 3D 世界。</p>
+<p>于构建大型世界模型（LWMs</p>
+<p>visual spatial intelligence</p>
+<p>可交互的空间智能</p>
+<p>空间智能， 空间智能</p>
+<p>AI can do</p>
+<p>Spatial intelligent</p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享到微信朋友圈"
+      
+      
+        data-wechat-qrcode-helper="扫一扫二维码分享到微信朋友圈"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>杨坤霖Kunlin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yangkunlin.cn/posts/eac76465/" title="世界模型调研概念辨析">http://yangkunlin.cn/posts/eac76465/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%89%8D%E6%B2%BF/" rel="tag"><i class="fa fa-tag"></i>人工智能前沿</a>
+              <a href="/tags/%E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B/" rel="tag"><i class="fa fa-tag"></i>世界模型</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i>深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/5751eea2/" rel="prev" title="C++">
+      <i class="fa fa-chevron-left"></i> C++
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/fc25f2a7/" rel="next" title="CS基本素养">
+      CS基本素养 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B0%83%E7%A0%94%E8%BF%87%E7%A8%8B%E7%9A%84%E6%A6%82%E5%BF%B5%E8%BE%A8%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">调研过程的概念辨析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Procedural-Content-Generation-PCG"><span class="nav-number">1.1.</span> <span class="nav-text">Procedural Content Generation(PCG)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E7%94%9F%E6%80%81%E8%A7%A3%E5%86%B3PCG%E8%8C%83%E5%9B%B4"><span class="nav-number">1.2.</span> <span class="nav-text">构建生态解决PCG范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCG-Hub"><span class="nav-number">1.3.</span> <span class="nav-text">PCG Hub</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Neural-radiance-field-%EF%BC%88NeRF%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">Neural radiance field （NeRF）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PCG-via-LLMs"><span class="nav-number">2.1.</span> <span class="nav-text">PCG via LLMs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%85%B3%E9%94%AE%E6%96%B9%E9%9D%A2"><span class="nav-number">2.1.1.</span> <span class="nav-text">构建世界模型的关键方面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91"><span class="nav-number">2.1.2.</span> <span class="nav-text">未来方向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">2.1.3.</span> <span class="nav-text">结论</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="杨坤霖Kunlin"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">杨坤霖Kunlin</p>
+  <div class="site-description" itemprop="description">不要温和地走进那个良夜。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yangkunl" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yangkunl" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ykl.zjut@gmail.com" title="E-Mail → mailto:ykl.zjut@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://stackoverflow.com/users/23130323/yang-kunlin" title="StackOverflow → https:&#x2F;&#x2F;stackoverflow.com&#x2F;users&#x2F;23130323&#x2F;yang-kunlin" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>StackOverflow</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+         <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CS/" rel="tag">CS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-Science/" rel="tag">Computer Science</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Deep-Learning/" rel="tag">Deep Learning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/diffusion-model/" rel="tag">diffusion model</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B/" rel="tag">世界模型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%89%8D%E6%B2%BF/" rel="tag">人工智能前沿</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag">数学</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/" rel="tag">概率图模型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag">概率论</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨坤霖Kunlin</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">13k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">47 分钟</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=[object Object]" async="async"></script>
+  </div>
+
+
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("11/29/2024 10:00:00"); //修改为你的网站开始运行的时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒.";
+    }
+setInterval("createtime()",250);
+</script>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,0' opacity='0.4' zIndex='-1' count='100' src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-nest@1/canvas-nest.min.js"></script>
+  <script size="240" alpha="0.3" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'Ov23li4riM3aHdoPXvVw',
+      clientSecret: 'bd120dc66b28bf3ecccefd3742d05fee6d56158a',
+      repo        : 'gitalkcomment',
+      owner       : 'yangkunl',
+      admin       : ['yangkunl'],
+      id          : 'beb901f84474c9699c73f7bfba6274ef',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+    </div>
+</body>
+</html>
+<!-- 页面点击小红心 --> <script type="text/javascript" src="/js/clicklove.js"></script>

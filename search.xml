@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>世界模型调研概念辨析</title>
+    <url>/posts/eac76465/</url>
+    <content><![CDATA[<h1 id="调研过程的概念辨析"><a href="#调研过程的概念辨析" class="headerlink" title="调研过程的概念辨析"></a>调研过程的概念辨析</h1><h2 id="Procedural-Content-Generation-PCG"><a href="#Procedural-Content-Generation-PCG" class="headerlink" title="Procedural Content Generation(PCG)"></a>Procedural Content Generation(PCG)</h2><p><strong>PCG</strong> 是 <strong>Procedural Content Generation</strong> 的缩写，中文通常翻译为程序化内容生成。它是一种通过<strong>算法和规则自动生成内容的技术</strong>，广泛应用于游戏开发、虚拟世界构建、影视制作等领域。简单来说就是使用算法创建数据而不是手动创建数据，这些数据是在运行的时候生成。在计算机图形学中，它通常用于创建纹理和 3D 模型。在视频游戏中，它用于自动创建大量游戏内容。其最初是由于硬件性能的限制，通过在运行过程中生成来减少游戏的大小等。根据实现方式，程序生成的优势可能包括更小的文件大小、更多的内容以及随机性，以实现更不可预测的游戏玩法。</p>
+<span id="more"></span>
+<p><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Dragon_trees.jpg/290px-Dragon_trees.jpg" alt="img"></p>
+<blockquote>
+<p>一个过程生成的例子，这里使用 L 系统生成逼真的树木模型。通过改变确定性和随机种子，可以生成不同的模型。</p>
+</blockquote>
+<h2 id="构建生态解决PCG范围"><a href="#构建生态解决PCG范围" class="headerlink" title="构建生态解决PCG范围"></a>构建生态解决PCG范围</h2><p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241128213351251.png" alt="image-20241128213351251"></p>
+<p>这里的类HuggingFace，其实是指像Huggingface或者Github或者DokerHub一样有完善的开源生态，也就有人源源不断地上传相应的PCG模块，来解决PCG功能单一的问题。同时利用LLM将需要复杂PCG能力的任务拆分成子任务，这样通过相应的PCG组合达到多样化的目的。</p>
+<h2 id="PCG-Hub"><a href="#PCG-Hub" class="headerlink" title="PCG Hub"></a>PCG Hub</h2><p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241128221828447.png" alt="image-20241128221828116"></p>
+<p>没找到但是大概可以理解就是有大量PCG模块的一个Hub，貌似来源于这篇文章<a href="https://simg.baai.ac.cn/paperfile/29268b5d-e309-4c5a-b8f8-dedecb96c741.pdf">CityX: Controllable Procedural Content Generation for Unbounded 3D Cities</a>。</p>
+<p>由于有标准的Agent可以理解的文档，因此可以使用LLM进行交互。</p>
+<h1 id="Neural-radiance-field-（NeRF）"><a href="#Neural-radiance-field-（NeRF）" class="headerlink" title="Neural radiance field （NeRF）"></a>Neural radiance field （NeRF）</h1><p>神经辐射场（NeRF）<strong>是一种基于深度学习的从二维图像重建场景三维表示的方法</strong>。NeRF 算法将场景表示为深度神经网络（DNN）参数化的辐射场。该网络预测给定相机在欧拉角（θ，Φ）中的空间位置（x，y，z）和观察方向下的体积密度和视依赖发射辐射。通过沿相机射线采样许多点，传统的体积渲染技术可以生成图像。</p>
+<ul>
+<li><strong>数据收集</strong>：一个 NeRF 需要为每个独特的场景重新训练。第一步是从不同角度收集场景的图像及其相应的相机姿态。这些图像是标准的 2D 图像，不需要专门的相机或软件。任何相机都能生成数据集，只要设置和捕获方法符合 SfM（从运动结构）的要求。</li>
+<li><strong>训练</strong>：对于每个稀疏视点（图像和相机姿态）提供的信息，通过场景中的相机光线进行行进，生成一组具有给定辐射方向（进入相机）的 3D 点。对于这些点，使用多层感知器（MLP）预测体积密度和发出的辐射。然后通过经典体积渲染生成图像。因为此过程完全可微分，可以通过多个视点的梯度下降来最小化预测图像与原始图像之间的误差，鼓励 MLP 发展一个连贯的场景模型。</li>
+</ul>
+<h2 id="PCG-via-LLMs"><a href="#PCG-via-LLMs" class="headerlink" title="PCG via LLMs"></a>PCG via LLMs</h2><p>程序可控生成（PCG）是一种创建可扩展高质量资产的高效技术，但它对普通用户来说并不友好，因为它需要深厚的领域专业知识。为了解决这些问题，我们采用了大型语言模型（LLM）来驱动程序建模。</p>
+<p>前者包括大量可访问的程序资产和数以千计的手工 API 文档。后者旨在为 Blender 生成可执行的操作，以便在用户指令的指导下制作出可控且精确的 3D 资产。</p>
+<p>我们的 SceneX 可以生成一个跨度为 2.5 km × 2.5 km、布局和几何结构精细的城市，大大降低了时间成本，从专业 PCG 工程师的数周时间缩短到普通用户的几小时。</p>
+<p>广泛的实验证明了我们的方法在可控的大规模场景生成和编辑方面的能力，包括资产放置和季节转换。</p>
+<p>尽管之前的方法取得了可喜的成果，但由于使用三维基元（如点云或辐射场）的场景表示与工业流水线不兼容，因此在工业级应用方面仍存在很大差距。为了弥补这一差距，我们采用了程序建模技术，这是一种快速创建高质量 3D 资产的先进技术。它可以利用 Blender 等软件，通过可调参数和基于规则的系统[32]，在自然场景中生成逼真而复杂的 3D 资产。</p>
+<p>例如，Infinigen [42] 提出了一种程序生成器，它结合了不同的程序建模算法，可生成包括地形、天气、植被和野生动物在内的大规模自然场景。[33]、[5]和[46]使用程序建模生成城市级别的街道或布局。这些程序方法可在对象、场景和城市层面生成高质量的 3D 资产。然而，对程序建模的生成规则、算法框架和单个参数的全面掌握使得生成过程对初学者不友好，而且耗时较长，尤其是在大规模场景或城市生成方面。例如，生成图 1 所示的纽约市，就需要专业的 PCG 工程师工作两周以上。此外，由于用户的学习曲线较长，使用程序建模生成大型场景的难度很大。为解决上述问题，3D-GPT [45] 和 SceneCraft [19] 等现有作品通过整合 LLM 代理和程序生成软件，引入了一种指令驱动的 3D 建模方法。尽管这些方法成功地与人类设计师合作建立了程序生成框架，但仍然存在很大的局限性。首先，与程序生成法相比，SceneCraft 无法实现细粒度的三维资产编辑，因为固定的三维资产具有不可编辑的特性。其次，SceneCraft 和程序生成方法都无法实现对三维资产的精细编辑、3D-GPT 基于参数化程序生成模型 Infinigen，这限制了其充分利用现有 PCG 资源的能力。此外，它还无法生成高质量的大型场景，尤其是广阔的地形和无边无际的城市。最后，由于受到提示表达式的限制，资产的多样性也受到了限制。</p>
+<p>为了解决这些问题，我们提出了一个具有启发性的大规模场景生成框架 SceneX，它可以根据设计者的文字描述自动生成高质量的场景。通过引入 PCGBench，我们收集了大量可访问的程序资产，包括各种地形、城市和动植物等自然物体。这有助于我们生成多样、逼真和实用的大型场景。此外，我们还构建了数以千计的 API 参数文档，用于制定代理计划程序并提供定量评估。受现有 LLM 驱动规划方法 [28,44,49,51] 的启发，我们开发了一个 PCGPlanner 框架，用于生成与 Blender 相连接的正确 API 操作，从而在用户指令的指导下自动生成可控且精确的 3D 资产。这种基于 LLM 的自动化解决方案大大提高了场景生成的效率，降低了程序化场景建模的学习曲线，并实现了目标场景的定制化创建。除了程序建模的固有优势（如逼真和真实的几何图形）外，我们的 SceneX 还具有几个关键特性：</p>
+<p>效率：得益于所提出的 PCGBench 和 PCGPlanner，我们的 SceneX 可以快速生成大量高质量的 3D 资产，包括地形、城市和森林。此外，我们只需要几个小时就能生成一个大型城市，而专业设计师则需要两周以上的时间。</p>
+<p>可控性：SceneX 可以生成满足个性化需求的 3D 场景。例如，我们可以根据相应的描述实现场景编辑，如添加对象、在某个位置放置对象、平移季节等。</p>
+<p>多样性：SceneX 打破了特定生成算法和预定义规则的限制，利用先进的语言模型技术实现了更加灵活和多样化的大规模场景生成。具体来说，我们可以生成自然界中的大型地形，如沙漠、湖泊、森林和山脉；也可以生成现实世界中的高品质城市，如纽约、巴黎和东京；还可以生成各种物体，包括植物、动物和建筑物。</p>
+<p>近年来，三维资产生成技术突飞猛进，它结合了计算机图形学和计算机视觉的思想，实现了三维内容的自由创建。目前，三维资产生成方面的主要研究集中在创建单个对象[8,30,35,39]、三维头像[18,25,27,58]和三维场景[11,16,59,61,62]。其中，ZeroShot123 [35]提出了一种基于扩散模型的方法，该方法实现了目标的三维模型基于图片。DreamFusion [39] 提出了一种基于 NeRF 的方法，可让模型根据输入文本生成相应的 3D 模型。</p>
+<p>与单个物体的生成相比，大尺度场景的生成，包括自然地貌[9, 15, 34]和无边界城市[29,31,52]的生成，在元宇宙和游戏制作中无疑更具实用性和挑战性。</p>
+<p>这些基于学习的方法没有几何结构，因此难以直接应用于 UE 等虚拟引擎。例如，尽管 InfiniCity [31] 和 CityDreamer [52] 可以生成视觉上吸引人的城市场景，但由于缺乏清晰的几何图形，在实际应用中可能会出现问题，如物体相交和空间不连续性。</p>
+<p>研究人员利用程序内容生成（PCG）技术，对自然场景[12,60]和城市场景[33,46,48,54]的程序生成进行了深入研究。</p>
+<p>它采用数学算法生成街区和街道，并利用追尾技术生成建筑物的几何形状。</p>
+<p>虽然这些传统的计算机制图方法可以生成高质量的三维数据，但所有参数都必须预先输入到程序生成过程中。功能单一且由此产生的三维数据受规则限制，与真实世界存在一定程度的偏差。</p>
+<p>Infinigen [42] 引入了一种程序化生成逼真三维自然物体和场景的技术。这种方法有助于以编程方式生成所有资产，并通过随机数学算法生成网格和纹理。虽然 Infinigen 可以生成无限真实的资产，但用户无法根据自己的具体要求定制生成的结果。因此，我们提出了一种更方便的程序生成方法，以生成高质量的三维资产。</p>
+<p>研究人员利用隐藏在大型语言模型（LLMs）中的知识[1, 3, 10, 26,41]，探索 LLMs 以解决典型语言处理领域以外的复杂任务。这些任务包括数学推理[22, 50]、医学[23, 53]和规划[14, 20, 21, 57]等领域。凭借强大的推理和概括能力，LLM 可作为不同任务的实践规划者。例如，[20] 利用互联网上 LLMs 丰富的领域知识及其新兴的零点规划能力来执行复杂的任务规划和推理。研究了 LLM 在涉及多代理协调的场景中的应用，涵盖了一系列不同的任务目标。[56] 提出了一个模块化框架，通过多个大型预训练模型之间的提示，采用结构化对话。</p>
+<p>针对特定应用的专用 LLM 已经得到了探索，例如用于视觉感知任务的 HuggingGPT [44]、用于多模态理解的 VisualChatGPT [51]、Voyager [49] 和 [63]、用于办公软件的 SheetCopilot [28]，以及用于 Python 代码生成的 Codex [6]。受现有工作的启发，我们探索将 LLM 代理应用于 PCG 软件，如 Blender，以提供自动 3D 资产生成功能。</p>
+<blockquote>
+<p>HuggingGPT 是一个由大型语言模型（LLM）驱动的代理，旨在将多种 AI 模型连接起来，帮助解决机器学习社区中的各种 AI 任务。它结合了诸如 ChatGPT 等 LLM 和多个专家模型，以实现更高效的协作。</p>
+</blockquote>
+<p>提出的 SceneX 框架包含两个主要组件：PCGBench 和 PCGPlanner。</p>
+<p>PCGBench 是一个大型数据集，其中包含程序建模方面的各种资源，可用作资产库并评估生成性能。具体来说，它包括从互联网上收集插件和资产、资产注释以及手工制作 API 文档。在 PCGBench 的基础上，我们提出了一个新颖的 PCGPlanner 框架，用于使用 PCG 和预定义模型自动生成 3D 场景。该框架包括任务规划阶段、资产检索阶段和由具有自定义指令的代理引导的行动执行阶段。通过 PCGBench 和新颖的 PCGPlanner 代理之间的合作，SceneX 被赋予了高效、可控地生成各种高质量场景的能力。</p>
+<p>动作 API 包括原始 API 和用于控制资产生成的详细参数。具体来说，我们总共收集了 1532 个单独的原始 API，涉及场景生成任务的各个方面，如控制生成资产的位置、颜色、大小和高度。每个动作函数都包含多个原始 API，并带有相应的参数，可生成完整的 3D 资产。</p>
+<p>例如，为了生成图 2 所示的三维树，我们定义了两个单独的操作函数，如 tree_mesh_generate 和 tree_material_generate。每个函数都由多个原始 API 组成，并带有相应的参数，如 TreeHight（树高）、CrownDensity（树冠密度）、LeafDensity（树叶密度）等。这些参数可以在操作输入中进行操作，我们可以通过更改这些参数生成各种树木。</p>
+<p>为了实现在人类指令指导下可控地生成三维模型，我们应该制定大型语言模型（LLM）的动作函数、这也是前人的研究成果[6, 45, 49]。为此，我们编译了大量动作函数指导文档（API Documents），以便为 LLM 部署我们的函数。此外，我们还提供了所有参数名称及其可能值的全面记录。详见图 2。</p>
+<p>在资产收集方面，我们精心策划了一个庞大的 3D 数据集，其中包括 1,908 个精雕细琢的模型和 1,294 种纹理。该数据集种类繁多，包括建筑物、植物、城市基础设施以及从广袤的互联网上收集的纹理。这些现有资产为三维场景生成提供了另一种解决方案，即检索现有的单个程序模型，而不是逐步生成，这可以显著提高创建大型场景的效率。在检索方面，我们使用了 CLIP [40] 编码器功能，实现了文本到文本检索和文本到图像检索。因此，我们还通过为每个三维资产渲染图片的方式，为收集到的三维资产提供丰富的注释。<img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241129145218349.png" alt="image-20241129145218349"></p>
+<p>为了实现 LLM 驱动的资产生成，我们引入了 PCG Planner Agents 的层次结构，它由多个代理组成，可以根据用户的文本描述自动生成高质量的大型场景。根据以往的研究成果 [6,44,49,51]，我们设计的模块包括三个主要阶段：任务规划、资产检索和行动执行。在任务规划阶段，将引入一对顺序规划代理来处理用户查询并输出详细的子任务列表。然后，为了将子任务与 PCGBench 精确连接，我们会检索任务列表中提到的操作和资产。最后，执行代理利用注释的动作应用程序接口来处理程序生成或资产操作的子任务。</p>
+<p>为了让 LLM 具备像专家一样进行场景建模的能力，我们引入了一个系统模板，以提示作为代理的 LLM 完成场景建模任务中的子任务。对于每个代理，提示 P 具有类似的结构，定义为 Pi(Ri,Ti,Di,Fi,Ei)，其中 i∈{dispatch, specialist, retrieval, execution} 区分了代理的职责。提示的构成要素定义如下：</p>
+<p>每个代理都有一个特定的角色 R，它描述了代理在场景生成过程中的职责。在场景生成任务中，通常需要来自不同模块的多个动作 API。不同的 API</p>
+<p>需要按顺序调用。因此，正确安排不同模块和应用程序接口之间的功能至关重要。为了确保有能力处理各种场景生成任务并克服令牌限制，我们提出了一个两阶段迭代任务规划器，由一个调度代理和一个专家代理组成，如图 3 所示。调度代理 调度代理是第一个接收用户对目标场景描述的代理，负责从句子中提取信息。它充当计划者的角色，将用户的意图解释为一个粗略的计划，并列出输入指令中提到的所有对象。同时，用户可能会在描述中遗漏一些常见的背景物体，代理会自动将这些物体添加到粗略计划中。在知识文档 Ddispatch 中描述了场景的详细对象要求及其模块对应原则。我们对调度代理进行了如下表述：</p>
+<p>其中 q 代表用户输入，oi 代表粗略计划中列出的对象，以 { 模块：对象名称｝</p>
+<p>专家代理 然后，专家代理开始制定进一步的详细计划。在这一阶段，专家代理作为专业设计师，能够对粗略计划中给出的对象进行详细规划。根据对象的模块类别，专家代理会收到相应的知识文档 Dspecialist ⊂ D，其中 Dspecialist 包含每个模块的生成机制和解释。专家代理将每个粗略计划分解为包含若干子任务的详细计划，其中每个子任务对应一个可执行的应用程序接口或一个需要导入的资产</p>
+<p>根据专家代理给出的详细计划，我们需要在 PCGBench 中搜索要执行的合适 API 或要导入的资产。为了精确检索，我们提出了一个检索代理，它能识别子任务类型的目标是资产还是应用程序接口。通过 “预检索”（Pretrieval）提示，该代理还被指示输出一个描述，作为资产或应用程序接口的搜索索引。然后，该描述将被编码为用于检索的嵌入。在这里，我们使用预先训练好的 CLIP [40] 分别通过文本到文本检索和文本到图像检索来搜索我们的动作 API 和 3D 模型。如图 2 右侧所示，我们将 PCGBench 中每个资产的渲染图像编码成归一化的 768 维向量，然后与输入的描述嵌入进行比较。从五个最相似的结果中随机选择一个作为结果，并导入到 Blender 场景中。通过余弦距离计算相似度，选出匹配度最高的结果。</p>
+<p>在 PCGBench 中，每个动作 API 都以 Python 函数的形式定义，并带有多个预定义参数。获得 α 后，我们需要对这些初始参数进行自定义修改，以满足任务描述的要求。对于每个 API α，都有一个传入提示 Pspecialist 的知识文档 Dα∈ D。如图 2（a）所示，每个动作 API 的知识文档都以 JSON 格式记录，并具有相同的架构。以 tree_mesh_generate API 为例，函数中的每个参数都在 tree_mesh_doc = {“类型”：”tree mesh”，”Description”：”生成树状网格的函数”, “Function API”：”tree_mesh_generate”，”参数信息”：{“可能的值”：(高”、”中”、”低”）, …}}.执行代理可以表示为</p>
+<p>为了实现 LLM 驱动的资产生成，我们引入了 PCG Planner Agents 的层次结构，它由多个代理组成，可以根据用户的文本描述自动生成高质量的大型场景。</p>
+<p>任务规划、资产检索、行动执行，在任务规划阶段，将引入一对顺序规划代理来处理用户查询，并输出详细的子任务列表。然后，为了将子任务与 PCGBench 精确连接，我们会检索任务列表中提到的操作和资产。最后，执行代理利用注释的动作应用程序接口来处理程序生成或资产操作的子任务。</p>
+<p>Agent construction：</p>
+<p>在每个步骤中，代理都会根据其任务得到一份知识文档的提示。我们将 D 表示为包含 PCGBench 中预定义的所有知识文档的集合</p>
+<p>F denoted as the output format for each agent. To precisely and concisely convey information between agents, the output format of each agent is strictly defined.</p>
+<p>为确保能够胜任各种场景生成任务并克服标记限制，我们提出了一个两阶段迭代任务规划器，由一个调度代理和一个专家代理组成，如图 3 所示。</p>
+<p>调度代理 调度代理是第一个接收用户对目标场景描述的代理，负责从句子中提取信息。</p>
+<p>它作为一个规划器，将用户意图解释为一个粗略的计划，并列出输入指令中提到的所有对象。同时，用户可能会在描述中遗漏一些常见的背景对象，代理会自动将这些对象添加到粗略计划中。在知识文档 Ddispatch 中描述了场景的详细对象要求及其模块对应原则。我们对调度代理进行了如下表述：</p>
+<p>然后，启动专家代理，制定进一步的详细计划。在这一阶段，专业代理人充当专业设计师的角色，能够为粗略规划中给出的对象提供详细规划。根据对象的模块类别，专家代理会收到相应的知识文档 Dspecialist ⊂ D，其中 Dspecialist 包含每个模块的生成机制和解释。专家代理将每个粗略计划分解为包含若干子任务的详细计划，其中每个子任务对应一个可执行的应用程序接口或一个要导入的资产</p>
+<p>where sj stands for one of the sub-tasks to be completed</p>
+<p>根据专家代理给出的详细计划，我们需要在 PCGBench 中搜索要执行的合适 API 或要导入的资产。为了精确检索，我们提出了一个检索代理，它能识别子任务类型的目标是资产还是应用程序接口。通过 “预检索”（Pretrieval）提示，该代理还被指示输出一个描述，作为资产或应用程序接口的搜索索引。然后，该描述将被编码为用于检索的嵌入。在这里，我们使用预先训练好的 CLIP [40] 分别通过文本到文本检索和文本到图像检索来搜索我们的动作 API 和 3D 模型。如图 2 右侧所示，我们将 PCGBench 中每个资产的渲染图像编码成归一化的 768 维向量，然后与输入的描述嵌入进行比较。从五个最相似的结果中随机选择一个作为结果，并导入到 Blender 场景中。通过余弦距离计算相似度，选出匹配度最高的结果。</p>
+<p>使用计算机图形学构建世界模型涉及多种先进技术和方法，旨在创建逼真的三维环境和物体表示。以下是基于所提供资源的详细综述。</p>
+<h3 id="构建世界模型的关键方面"><a href="#构建世界模型的关键方面" class="headerlink" title="构建世界模型的关键方面"></a>构建世界模型的关键方面</h3><ol>
+<li><p><strong>概念与定义</strong>：<br>世界模型是一种复杂的结构，用于表示和交互三维环境，支持游戏、虚拟现实（VR）、机器人技术和城市规划等多种应用<a href="https://a16z.com/announcement/investing-in-world-labs/">^1</a> <a href="https://www.pymnts.com/news/investment-tracker/2024/world-labs-raises-230-million-to-build-spatially-intelligent-ai/">^6</a>。随着人工智能（AI）和机器学习等技术的进步，创建能够以完整3D形式呈现真实或想象场所的模型已成为研究重点。</p>
+</li>
+<li><p><strong>三维建模技术</strong>：  </p>
+<ul>
+<li><strong>运动结构（SfM）</strong>：这种方法利用从不同角度拍摄的多张2D图像来重建3D结构。通过识别不同图像中的共同特征，SfM可以生成详细的点云或网格模型<a href="https://viso.ai/computer-vision/3d-computer-vision/">^7</a>。  </li>
+<li><strong>激光雷达（LiDAR）</strong>：一种通过发射光脉冲并分析反射信号来测量距离的遥感方法。这种技术能够提供高度精确的空间数据，是3D建模的关键工具<a href="https://www.nextechar.com/blog/3d-modeling-in-gaming-industry">^5</a> <a href="https://viso.ai/computer-vision/3d-computer-vision/">^9</a>。  </li>
+<li><strong>摄影测量</strong>：利用照片创建3D模型的技术，因其能够从现实物体中制作精确表示而备受青睐<a href="https://shairozsohail.medium.com/generating-3d-models-with-deep-learning-part-1-917cc4757143">^4</a>。</li>
+</ul>
+</li>
+<li><p><strong>工具与软件</strong>：<br>各种3D建模软件在这一过程中起着重要作用：  </p>
+<ul>
+<li><strong>Blender</strong>：一款开源软件，因其在建模、动画和渲染方面的多功能性而备受欢迎<a href="https://www.fiverr.com/resources/guides/graphic-design/what-is-3d-modeling">^10</a>。  </li>
+<li><strong>Autodesk Maya 和 3ds Max</strong>：电影和游戏开发行业的标准工具，尤其适用于创建复杂动画和视觉效果<a href="https://www.fiverr.com/resources/guides/graphic-design/what-is-3d-modeling">^10</a>。  </li>
+<li><strong>SketchUp</strong>：以其用户友好的界面和参数化建模能力而闻名，主要用于建筑和设计领域<a href="https://www.fiverr.com/resources/guides/graphic-design/what-is-3d-modeling">^10</a>。</li>
+</ul>
+</li>
+<li><p><strong>应用领域</strong>：<br>详细的3D世界模型的应用非常广泛：  </p>
+<ul>
+<li><strong>游戏</strong>：在游戏中，3D模型对于创建角色设计、环境和交互对象以增强玩家沉浸感至关重要<a href="https://www.nextechar.com/blog/3d-modeling-in-gaming-industry">^6</a>。  </li>
+<li><strong>虚拟现实</strong>：沉浸式VR体验依赖于精确设计的3D模型，这些模型能够模拟现实世界的物理特性和环境<a href="https://www.nextechar.com/blog/3d-modeling-in-gaming-industry">^6</a>。  </li>
+<li><strong>城市与环境规划</strong>：3D城市模型有助于模拟环境条件、分析城市设计的影响，并促进智慧城市规划的实施<a href="https://www.gim-international.com/content/article/state-of-the-art-in-3d-city-modelling-2">^9</a>。</li>
+</ul>
+</li>
+<li><p><strong>挑战</strong>：<br>尽管技术不断进步，但仍存在一些挑战，包括数据一致性、模型精度以及不同3D建模软件和标准之间实现互操作性的问题<a href="https://www.gim-international.com/content/article/state-of-the-art-in-3d-city-modelling-2">^9</a>。</p>
+</li>
+</ol>
+<h3 id="未来方向"><a href="#未来方向" class="headerlink" title="未来方向"></a>未来方向</h3><p>构建世界模型的未来趋势表明，将越来越多地集成AI以自动化和增强建模过程。像World Labs这样的公司正致力于创建交互式3D世界，使用户能够无缝探索和操控环境<a href="https://a16z.com/announcement/investing-in-world-labs/">^1</a> <a href="https://www.pymnts.com/news/investment-tracker/2024/world-labs-raises-230-million-to-build-spatially-intelligent-ai/">^6</a>。  </p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>构建3D世界模型是一个快速发展的领域，它结合了艺术技能与复杂的技术工具。随着技术的进步，实时数据和AI的整合将进一步增强虚拟环境的真实性和交互性，为各行业的创新应用铺平道路。  </p>
+<p>如需进一步阅读，您可以探索以下文章：  </p>
+<ul>
+<li><a href="https://worldlabs.ai/">World Labs</a>撰写的《构建由AI驱动的交互式世界》。</li>
+</ul>
+<p>这篇综述全面概括了当前计算机图形学领域中世界建模的实践与未来发展方向。</p>
+<p>人类智慧有许多方面。其中之一是语言智能，使我们能够通过语言与他人沟通和联系。但也许更基本的是空间智能，它使我们能够理解和与世界周围的事物互动。空间智能还帮助我们创造，将心中的图像带入现实世界。我们用它来推理、移动和发明——将任何从简陋的沙堡到高耸的城市可视化并设计出来。</p>
+<p>我们相信人工智能将帮助人类建设更美好的世界。进步迅速，但我们只看到了生成式 AI 革命的序章。到目前为止，语言催化了这一激动人心的早期时刻，文本提示的图像和视频模型与大型语言模型（LLMs）一同崛起，预示着 AI 在视觉领域的潜力。这些模型已经使人们能够以新的方式工作和创造；但它们只是触及了可能性的表面。要超越今天模型的局限性，我们需要能够模拟世界并对三维空间和时间中的物体、地点和交互进行推理的空间智能 AI。</p>
+<p>今天，我们宣布成立世界实验室：一家构建大型世界模型（LWMs）的空间智能 AI 公司，以感知、生成和与 3D 世界互动。我们的目标是把 AI 模型从像素的 2D 平面提升到完整的 3D 世界——无论是虚拟的还是现实的——赋予它们与我们一样丰富的空间智能。人类的空间智能经过数千年的进化；但在这一非凡进步的时代，我们看到在近期内赋予 AI 这种能力的机会。</p>
+<p>朝着这个目标，World Labs 将开发能够从图像和其他模态中理解和推理 3D 世界的空间智能大型世界模型（LWMs）。随着时间的推移，我们预计将训练出越来越强大的模型，这些模型具有更广泛的能力，可以应用于各种领域，并与人类并肩工作。</p>
+<p>最初，我们将专注于生成无限制的 3D 世界 - 创建和编辑包含物理、语义和控制功能的虚拟空间。我们希望这将解锁创意用户和专业人士（如艺术家、设计师、开发人员和工程师）的新能力。它还将允许任何人想象和创造自己的世界，将生成式 AI 从 2D 图像和视频扩展到 3D 世界。</p>
+<p>于构建大型世界模型（LWMs</p>
+<p>visual spatial intelligence</p>
+<p>可交互的空间智能</p>
+<p>空间智能， 空间智能</p>
+<p>AI can do</p>
+<p>Spatial intelligent</p>
+]]></content>
+      <categories>
+        <category>前沿技术探索</category>
+      </categories>
+      <tags>
+        <tag>人工智能前沿</tag>
+        <tag>世界模型</tag>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VideoDirector</title>
+    <url>/posts/c53df283/</url>
+    <content><![CDATA[<h1 id="VideoDirector-Precise-Video-Editing-via-Text-to-Video-Models"><a href="#VideoDirector-Precise-Video-Editing-via-Text-to-Video-Models" class="headerlink" title="VideoDirector: Precise Video Editing via Text-to-Video Models"></a>VideoDirector: Precise Video Editing via Text-to-Video Models</h1><p>先看看效果🤪</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/datadataimage-20241202194259030.png"></p>
+<p>效果感觉一般，以这个例子来看，其应该是对Tokenflow[^1]做的改进，应该也是用T2I模型在时空上做的操作，不过我感觉效果有限，再好也很难超过Tokenflow了。看看他怎么讲故事的<span class="github-emoji"><span>😄</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>。</p>
+<span id="more"></span>
+
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><blockquote>
+<p>Despite the typical inversion-then-editing paradigm using text-to-image (T2I) models has demonstrated promising results, directly extending it to text-to-video (T2V) models still suffers severe artifacts such as color flickering and content distortion.</p>
+</blockquote>
+<p>跟我想的没错，还是Inversion-base的方法，然后research gap还是由于将T2I的图像编辑方法拓展到T2V的视频编辑方法，会出现artifacts（伪影），例如色彩闪烁和内容失真。</p>
+<blockquote>
+<p>Consequently, current video editing methods primarily rely on T2I models, which inherently lack temporal-coherence generative ability, often resulting in inferior editing results.</p>
+</blockquote>
+<p>已经有很多方法是基于T2V做的了，（尽管在社区开源的T2V模型比较少）比如我之前的工作，比如UniEdit[^2]，VidToMe[^3]，AnyV2V[^4]。很难想象这是2024年底的文章。想错了其是用T2V模型做的<span class="github-emoji"><span>🤒</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f912.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>。其创新点是围绕时空这个research gap讲的，引言部分详细介绍。</p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
+<p>Notably, instead of using T2V models, current video editing methods are still built upon T2I models by leveraging inter-frame features [5, 12, 14], incorporating optical flows [3], or training auxiliary temporal layers [16].</p>
+</blockquote>
+<p>有很多工作是基于T2V做的了。</p>
+<blockquote>
+<p>As a result, these methods still suffer inferior realism and temporal coherence due to the absence of temporal coherence in vanilla T2I models. This raises a question: Can we edit a video directly using T2V models?</p>
+</blockquote>
+<p>他写文章的时候不调研一下的吗，11月份应该是投CVPR2025。之后的写法基本一致，其首先介绍在图像编辑的领域，通过Null-text Inversion和CFW能够做到无偏Inversion。再通过注意力操作实现编辑任务，但是直接将这样的方法利用T2V模型搬到视频编辑任务上就会导致闪烁和失真。并用了一张图来证明：</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241202202012463.png" alt="image-20241202202012463"></p>
+<blockquote>
+<p>图画的真好看，大有可为啊！</p>
+</blockquote>
+<p>同时在这张图上，作者分析了为啥图像编辑的Inversion加注意力的范式直接通过T2V移植到视频编辑是不可行的。</p>
+<blockquote>
+<p>错怪作者了，我以为是作者的主要工作就是将图像编辑的范式通过T2V移植到视频编辑了。但是实际上作者是说直接将想法移植是不可行的，因此其做了改进，那么这个改进就是创新点！</p>
+</blockquote>
+<p>主要是有两个原因：</p>
+<ol>
+<li>T2V模型时空紧密耦合在一起，就算是使用改进后的Inversion，还是会有重建偏差</li>
+<li>视频的时空布局太复杂了，而图像编辑的注意力操作没有办法完成这么复杂的操作，太复杂就会导致操作注意力的时候不同的时空Token进行干扰。</li>
+</ol>
+<p>最后，作者介绍了针对这些问题做的改进：</p>
+<ol>
+<li>通过一个解耦合操作，提供额外的时间线索。并且将null-text embedding 拓展到多帧的阶段去适应时间信息</li>
+<li>提出了一个自注意力操作去控制复杂的时空布局</li>
+</ol>
+<blockquote>
+<p>感觉就解耦合操作是作者自己的东西，其他好像都是其他文章的。自注意力在图像编辑的时候就有引出了，这么出名作者不可能不知道，感觉作者是将各种方法拼凑在一起，最后加了一个解耦合，但是创新点不够，因此这么写。</p>
+</blockquote>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>改进1：</p>
+<p><strong>Muti-Frame Null-Text Embedding：</strong>将原本的空文本Embedding拓展一个维度：${φ_t}∈R^{F ×l×c}$，其中 $l$ 和 $c$ 分别代表序列长度和Embedding维度。</p>
+<p><strong>Spatial-Temporal Decoupled Guidance:</strong> 利用视频Inversion过程中的时间和自注意力特征来获得空间和时间的解耦合信号。</p>
+<blockquote>
+<p>这个解耦合居然也是来自其他文献的，逆天了</p>
+</blockquote>
+<p>时间一致性可以通过最小化时间注意力的特征图来获得，如下图公式所示：<br>$$<br>\mathcal{L}_T = \mathcal{M}<em>T^{f/b} \cdot \mathcal{M}<em>T \cdot |(\mathcal{T}</em>+ - \mathcal{T}</em>-)|_2^2<br>$$</p>
+<p>$$<br>\mathcal{G}_T^{f/b} = \frac{\partial(\mathcal{L}_T)}{\partial z_t}<br>$$<br>其中$\mathcal{T}$代表注意力map，$+$和$-$分别代表Inversion过程和Denoising 过程，然后$ \mathcal{M}_T$代表一个Mask将Map最后一个维度选择前top $K$个值。$\mathcal{M}_T^{f/b}$代表由SAM2获得的前景和背景mask。</p>
+<blockquote>
+<p>SAM2: Segement anything ，一个语义分割模型</p>
+</blockquote>
+<p>同时上式一并用在时空注意力上如下：<br>$$<br>\mathcal{L}<em>\mathcal{K} = \mathcal{M}<em>\mathcal{K}^{f/b} \cdot ||\mathcal{K}</em>+ - \mathcal{K}</em>-||_2^2<br>$$<br>$$<br>\mathcal{G}_\mathcal{K}^{f/b} = \frac{\partial(\mathcal{L}_\mathcal{K})}{\partial z_t}<br>$$</p>
+<p>因此可以获得时空解耦的梯度如下：<br>$$<br>\mathcal{G} = \eta_f \cdot \mathcal{G}_T^f + \eta_b \cdot \mathcal{G}_T^b + \zeta_f \cdot \mathcal{G}_\mathcal{K}^f + \zeta_b \cdot \mathcal{G}_\mathcal{K}^b<br>$$<br>前面的系数都是超参，具体使用这个梯度如下：<br>$$<br>\epsilon_\theta = \epsilon_\theta(z_t, c, t) + \omega[\epsilon_\theta(z_t, c, t) - \epsilon_\theta(z_t, \phi, t)] + \mathcal{G}<br>$$<br>注意这个$\omega$就是CFG，这个式子其实就是最经典的去噪公式，只是其后面加了一个处理后的梯度$\mathcal{G}$.</p>
+<p><strong>Attention Control for Video Editing</strong>：其实就是替换自注意力，将编辑分支的注意力替换为重建分支。然后其中也使用了SAM2生成的mask，具体公式如下：<br>$$<br>\widehat{Attn}=\begin{cases} W_t \cdot V_t^*, &amp; \text{if } t &lt; \tau_s, \ S\left(\frac{Q_t^* \cdot \hat{K}_t^\top}{\sqrt{d}} \otimes [1|\mathcal{M}^f]\right) \cdot \hat{V}_t, &amp; \text{otherwise.} \end{cases}<br>$$<br>然后还有他之前提的交叉注意力的操作：<br>$$<br>M_t^C=\begin{cases} C \cdot [\gamma \cdot (M_t^*) + (1-\gamma) \cdot (M_t’)], &amp; \text{if } t &lt; \tau_c, \ M_t^*, &amp; \text{otherwise.} \end{cases}<br>$$</p>
+<blockquote>
+<p>题外话，如果噪声预测部分是用DiT实现的话，不存在交叉注意了，怎么注入呢</p>
+</blockquote>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>数据也是自己收集的，prompt来自GPT和作者自己。使用AnimateDiff作为background，这个不错看看。</p>
+<blockquote>
+<p>Our method requires 8.5 minutes for pivotal tuning and 1 minute for video editing on a single A100 GPU.</p>
+</blockquote>
+<p>跑一个要快十分钟, 还是在A100上，这就是拼凑方法的坏处。</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241202213407941.png" alt="image-20241202213407941"></p>
+<blockquote>
+<p>远远不如我的工作，而且作者的所有例子都没有shape发生大面积更改的情况，因为他们用了mask，虽然对非编辑部分进行了保护，但是也最终导致了没办法进行shape编辑。</p>
+</blockquote>
+<h2 id="相关文献"><a href="#相关文献" class="headerlink" title="相关文献"></a>相关文献</h2><p>[^1]:Geyer, Michal, Omer Bar-Tal, Shai Bagon和Tali Dekel. 《TokenFlow: Consistent Diffusion Features for Consistent Video Editing》. arXiv, 2023年11月20日. <a href="http://arxiv.org/abs/2307.10373">http://arxiv.org/abs/2307.10373</a>.<br>[^2]:Bai, Jianhong, Tianyu He, Yuchi Wang, Junliang Guo, Haoji Hu, Zuozhu Liu和Jiang Bian. 《UniEdit: A Unified Tuning-Free Framework for Video Motion and Appearance Editing》. arXiv, 2024年2月23日. <a href="https://doi.org/10.48550/arXiv.2402.13185">https://doi.org/10.48550/arXiv.2402.13185</a>.<br>[^3]:《VidToMe_Arxiv.pdf》. 见于 2024年4月13日. <a href="https://vidtome-diffusion.github.io/VidToMe_Arxiv.pdf.Ku">https://vidtome-diffusion.github.io/VidToMe_Arxiv.pdf.Ku</a>, Max, Cong Wei,<br>[^4]: Weiming Ren, Harry Yang和Wenhu Chen. 《AnyV2V: A Plug-and-Play Framework For Any Video-to-Video Editing Tasks》. arXiv, 2024年3月21日. <a href="https://doi.org/10.48550/arXiv.2403.14468">https://doi.org/10.48550/arXiv.2403.14468</a>.</p>
+]]></content>
+      <categories>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>diffusion model</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机器学习</title>
+    <url>/posts/498ab7d9/</url>
+    <content><![CDATA[<h2 id="概率图模型"><a href="#概率图模型" class="headerlink" title="概率图模型"></a>概率图模型</h2><p>概率图模型，简称图模型，是指用一种用图结构描述多元随机变量之间条件独立关系的概率模型，从而给研究高维空间中的概率模型带来了很大的便捷性。对于一个K维随机变量$X=[X_1,X_2,\cdots,X_K]^T$，其联合概率为高维空间中的分布，一难以直接建模。</p>
+<blockquote>
+<p>在不做任何独立假设条件的情况下，需要$M^K-1$的参数才能表示其概率分布</p>
+<p><strong>为什么需要  $M^K - 1$  个参数？</strong></p>
+<p>对于一个 ( $K$) 维离散随机向量 $\mathbf{X} = [X_1, X_2, \cdots, X_K]^T$，假设每个变量 ( $X_i$ ) 有 $M $个可能取值，则联合概率分布需要 $M^K $ 个概率值来完全描述所有可能的取值组合。然而，由于概率分布需要满足归一化约束（所有概率之和为 1），因此只需要 ( $M^K - 1$ ) 个独立参数即可描述整个分布。</p>
+</blockquote>
+<p>为了减少联合概率建模的参数量，首先可以将一个$K$维随机向量$X$的联合概率分解为$K$个条件概率的乘积：<br>$$<br>p(x) \triangleq P(X = x)= \prod_{k=1}^K p(x_k|x_1,\cdots,x_{k-1}),<br>$$<br>其中$x_k$代表变量$X_k$的取值，如果某些变量之间存在条件独立，其参数量就可以大幅减少。当概率模型中的变量数量比较多时，其条件依赖关系也比较复杂．我们可 以使用图结构的方式将概率模型可视化，以一种直观、简单的方式描述随机变量 之间的条件独立性，并可以将一个复杂的联合概率模型分解为一些简单条件概率模型的组合。</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241202134344599.png" alt="image-20241202134344599"></p>
+<p>图结构的三个基本问题：（1） 表示问题 （2）学习问题 （3）推断问题。</p>
+<h3 id="模型表示"><a href="#模型表示" class="headerlink" title="模型表示"></a>模型表示</h3><p>图由一组节点和节点之间的边组成。在概率图模型中，每个节点都表示一 个随机变量（或一组随机变量），边表示这些随机变量之间的概率依赖关系。常见的概率图模型可以分为两类：有向图模型和无向图模型。</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241202134803019.png" alt="image-20241202134803019"></p>
+<h4 id="有向图模型"><a href="#有向图模型" class="headerlink" title="有向图模型"></a>有向图模型</h4><p>有向图模型也称为贝叶斯网络或信念网络，是一类用有向图来描述随机向量概率分布的模型。贝叶斯网络，对于一个$K$维随机向量$X$和一个$K$个节点的有向非循环图$𝐺$，$𝐺$中的每个节点都对应一个随机变量，每个连接$𝑒_{𝑖𝑗}$表示两个随机变量$𝑋<em>𝑖$和$𝑋_𝑗$之间具有非独立的因果关系．令$𝑿</em>{𝜋𝑘}$ 表示变量𝑋𝑘的 所有父节点变量集合，$𝑃(𝑋<em>𝑘|𝑿</em>{𝜋𝑘} )$表示每个随机变量的局部条件概率分布。如果$X$的联合概率分布可 以分解为每个随机变量$𝑋<em>𝑘$的局部条件概率的连乘形式，即<br>$$<br>p(\boldsymbol{x}) = \prod</em>{k=1}^{K} p(x_k|x_{\pi_k}),<br>$$</p>
+<blockquote>
+<p>这个公式可以由上式中条件概率分布推导出联合概率分布得出。上述的$(G,X)$构成了一个贝叶斯网络。</p>
+</blockquote>
+<p><strong>条件独立性</strong>：在贝叶斯网络中，如果两个节点是直接连接的，它们肯定是非条件独立的，是直接因果关系，父节点是因，直接的是果。</p>
+<p>如果不是直接连接的，则情况较为复杂如下：</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241202140827258.png" alt="image-20241202140827258"></p>
+<p>这四种关系分别为：（1） 间接因果关系 （2）间接果因关系 （3）共因关系 （4）共果关系</p>
+<blockquote>
+<p>这四种关系比较抽象，以一个例子来说明：</p>
+<p>共因关系是指两个变量（$𝑋_1$和$𝑋_3$）都受到同一个变量（$𝑋_2$）的影响，其中$𝑋_2$被称为”共同原因”或”共因”。</p>
+<p>这种关系有两个重要特征：</p>
+<ol>
+<li>当我们不知道$𝑋_2$的情况时，$𝑋_1$和$𝑋_3$之间会表现出相关性（不独立）</li>
+<li>但当我们知道了$𝑋_2$的值后，$𝑋_1$和$𝑋_3$就变成条件独立的了</li>
+</ol>
+<p>举个实际例子：</p>
+<ul>
+<li>$𝑋_2$是天气（晴/雨）</li>
+<li>$𝑋_1$是人们带伞的情况</li>
+<li>$𝑋_3$是地面是否潮湿</li>
+</ul>
+<p>如果我们不知道天气情况（$𝑋_2$），看到有人带伞（$𝑋_1$）就能推测地面可能潮湿（$𝑋_3$）。但如果我们已经知道天气情况（$𝑋_2$），那么人们是否带伞（$𝑋_1$）就与地面是否潮湿（$𝑋_3$）没有直接关系了，它们都只是受到天气的影响。</p>
+</blockquote>
+<p><strong>局部马尔科夫性：</strong>对于一个更一般的贝叶斯网络，其局部马尔科夫性质为：每个随机变量在给定父节点的情况下，条件独立于它的后代节点。</p>
+<p><strong>常见的有向图模型</strong>：很多经典的机器学习模型可以使用有向图模型来描述，比如朴素贝叶斯分 类器、隐马尔可夫模型、深度信念网络等。</p>
+<p><strong>sigmoid信念网络</strong>：为了减少模型参数，可以使用参数化模型来建模有向图模型中的条件概率分布，而sigmoid信念网络是一种简单的参数化模型。sigmoid中的变量取值为${0,1}$，对于变量$X_k$，和它的父节点集合$\pi_k$，其条件概率分布表示为:<br>$$<br>p(x_k = 1|\mathbf{x}<em>{\pi_k}, \theta) = \sigma(\theta_0 + \sum</em>{x_i \in \mathbf{x}_{\pi_k}} \theta_i x_i),<br>$$<br>其中$\theta$为可以学习的参数，$\sigma$是Logistic函数，假设变量$X_k$的父节点数量为$M$，使用表格的参数为$2^M$而使用sigmoid信念网络只需要$M+1$个参数。值得一提的是，Sigmoid信念网络与Logistic回归模型都采用Logistic函数来计算条件概率．如果假设Sigmoid信念网络中只有一个叶子节点，其所有的父节点之间没有连接，且取值为实数，那么Sigmoid信念网络的网络结构和Logistic回归模型类似。但是，这两个模型的区别在于，Logistic回归模型中的$𝒙$作为一种确定性的参数，而非变量． 因此，Logistic回归模型只建模条件概率$𝑝(𝑦|𝒙)$，是一种判别模型；而Sigmoid信念网络建模联合概率$𝑝(𝒙,𝑦)$，是一 种生成模型．</p>
+<p><strong>朴素贝叶斯分类器</strong>：其是一种简单的概率分类器，在</p>
+]]></content>
+      <categories>
+        <category>学习</category>
+        <category>计算机相关</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>人工智能</tag>
+        <tag>概率图模型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>概率论学习</title>
+    <url>/posts/c3185712/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">概率论只不过是把常识归纳为计算问题．
+——皮埃尔-西蒙·拉普拉斯（Pierre-SimonLaplace）</blockquote>
+## 学习起因
+
+<p>学diffusion model的时候看不太懂公式，发现我学概率论已经是大二2021年的事情了，基本上忘了个精光，故重新学习。此外我发现一个有趣的网站（<a href="https://probability.visualized.fun/">看见概率论 - 通过交互式演示理解经典概率论定理</a>）因此开个新贴，学习一下。</p>
+<h2 id="大数定理：概率的收敛之美"><a href="#大数定理：概率的收敛之美" class="headerlink" title="大数定理：概率的收敛之美"></a>大数定理：概率的收敛之美</h2><blockquote>
+<p><em>“人生就像一场大数定理实验，重要的不是单次的成败，而是坚持到收敛的那一刻。 记住 ——*<em>样本量不够，就往死里试！</em></em>“*</p>
+</blockquote>
+<h3 id="1-核心思想"><a href="#1-核心思想" class="headerlink" title="1.核心思想"></a>1.核心思想</h3><p>大数定理告诉我们：随着试验次数的增加，样本的平均值会越来越接近理论期望值。<br>$$<br>样本均值 → 理论期望值（当n→∞）<br>$$</p>
+<ul>
+<li>试验次数较少时，平均值波动较大</li>
+<li>随着次数增加，平均值会稳定在期望值附近</li>
+<li>这种收敛性为统计推断提供了理论基础</li>
+</ul>
+<p>特点：</p>
+<ol>
+<li>随机性，每次试验的结果都是随机的，无法准确预测</li>
+<li>独立性，每次试验相互独立，不受之前的结果影响</li>
+<li>收敛性，大量重复之后，平均值趋近于理论期望值</li>
+</ol>
+<h3 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h3><p>看见概率论中准备了三个实验，分别为骰子实验，硬币实验，随机抽样</p>
+<ul>
+<li><h4 id="骰子实验"><a href="#骰子实验" class="headerlink" title="骰子实验"></a>骰子实验</h4><p>实验目标：</p>
+<ol>
+<li>验证多次投掷骰子的平均值会收敛到3.5 (1+2+3+4+5+6)/6</li>
+<li>观察收敛速度与试验次数的关系</li>
+<li>理解随机事件的独立性原理</li>
+</ol>
+<p>观察重点：</p>
+<ol>
+<li>绿色线表示每次投掷的实际点数</li>
+<li>蓝色线表示到目前为止的平均值</li>
+<li>红色虚线表示理论期望值3.5</li>
+</ol>
+<p>预期现象</p>
+<ol>
+<li>开始时平均值（蓝线）波动较大</li>
+<li>随着投掷次数增加，平均值会逐渐靠近3.5</li>
+<li>单次投掷（绿线）始终在1-6之间随机波动</li>
+</ol>
+<p>实验现象</p>
+<p>当试验次数为10：</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130230622385.png" alt="image-20241130230622385"></p>
+<p>当试验次数为100：</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130230701406.png" alt="image-20241130230701406"></p>
+<p>当试验次数为1000</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130230747132.png" alt="image-20241130230747132"></p>
+<p><strong>实验结论</strong>：</p>
+<ul>
+<li>单次投掷结果完全随机，但大量重复后会呈现稳定规律</li>
+<li>试验次数越多，平均值越接近理论期望值3.5</li>
+<li>这种收敛性质正是大数定理的完美体现</li>
+</ul>
+<p><strong>启示思考</strong>：</p>
+<ul>
+<li>统计规律需要大量样本才能显现</li>
+<li>小样本的结果可能会产生较大偏差</li>
+<li>概率不能预测单次结果，但能预测长期表现</li>
+</ul>
+</li>
+</ul>
+<h2 id="贝叶斯定理：概率推理的艺术"><a href="#贝叶斯定理：概率推理的艺术" class="headerlink" title="贝叶斯定理：概率推理的艺术"></a>贝叶斯定理：概率推理的艺术</h2><blockquote>
+<p><em>“人生就像一场贝叶斯更新，每一条新信息都是一次概率革命。不过最重要的是 ——*<em>先验概率不重要，重要的是不断更新！</em></em>“*</p>
+</blockquote>
+<h3 id="1-核心思想-1"><a href="#1-核心思想-1" class="headerlink" title="1.核心思想"></a>1.核心思想</h3><p>贝叶斯定理帮助我们在获得新信息后更新判断。它告诉我们如何根据新的观察结果， 科学地调整我们对某件事的认知。</p>
+<p>贝叶斯公式：<br>$$<br>P(A|B) = P(B|A) × P(A) ÷ P(B)<br>$$</p>
+<p>已知变量：</p>
+<ul>
+<li>P(A) - 先验概率：在获得新证据前的初始判断</li>
+<li>P(B|A) - 似然度：在A发生的条件下，观察到B的概率</li>
+<li>P(B|¬A) - 似然度：在A不发生的条件下，观察到B的概率</li>
+</ul>
+<p>需要计算的变量：</p>
+<ul>
+<li><p>P(B) - 全概率：观察到B的总概率</p>
+<p>= P(A) × P(B|A) + P(¬A) × P(B|¬A)</p>
+</li>
+<li><p>P(A|B) - 后验概率：观察到B后，对A的更新判断</p>
+<p>= P(B|A) × P(A) ÷ P(B)</p>
+</li>
+</ul>
+<ol>
+<li>先验概率</li>
+</ol>
+<p>在获得新证据之前，基于已有经验和背景信息的初始判断</p>
+<ol start="2">
+<li>似然程度</li>
+</ol>
+<p>新观察到的证据对不同假设的支持程度</p>
+<ol start="3">
+<li>后验概率</li>
+</ol>
+<p>结合新证据后得出的更新判断</p>
+<h3 id="2-实验-1"><a href="#2-实验-1" class="headerlink" title="2.实验"></a>2.实验</h3><p>下雨概率：<br>$$<br>P(下雨|地面湿) = P(地面湿|下雨) × P(下雨) ÷ P(地面湿)<br>$$<br>已知变量：</p>
+<ul>
+<li>P(下雨) - 先验概率 P(R)<ul>
+<li>• 来源：根据天气预报、季节特征等预判</li>
+<li>• 含义：在观察地面之前对是否下雨的判断</li>
+</ul>
+</li>
+<li>P(地面湿|下雨) - 似然度 P(W|R)<ul>
+<li>• 来源：经验数据或实地观测</li>
+<li>• 含义：在下雨的情况下，地面变湿的概率</li>
+</ul>
+</li>
+<li>P(地面湿|不下雨) - 似然度 P(W|¬R)<ul>
+<li>• 来源：经验数据或实地观测</li>
+<li>• 含义：在不下雨的情况下，地面变湿的概率（如清洁、洒水等）</li>
+</ul>
+</li>
+</ul>
+<p>需要计算的变量：</p>
+<ul>
+<li>P(地面湿) - 标准化常数 P(W)<ul>
+<li>• 通过全概率公式计算：P(W) = P(R) × P(W|R) + P(¬R) × P(W|¬R)</li>
+<li>• 含义：地面变湿的总概率，包括下雨和不下雨两种情况</li>
+</ul>
+</li>
+<li>P(下雨|地面湿) - 后验概率 P(R|W)<ul>
+<li>• 最终目标：通过贝叶斯公式计算</li>
+<li>• 含义：观察到地面湿润后，对下雨概率的更新判断</li>
+</ul>
+</li>
+</ul>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130233452258.png" alt="image-20241130233452258"></p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130233505405.png" alt="image-20241130233505405"></p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130233516515.png" alt="image-20241130233516515"></p>
+<p>也就是说贝叶斯公式是通过证据来更新先验概率。第一次弄懂了具体含义。。。</p>
+<p>如果新来的证据的似然度都一样的话，那这个证据是完全无用的，也就是不会更新概率。</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130233652239.png" alt="image-20241130233652239"></p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130233747460.png" alt="image-20241130233747460"></p>
+]]></content>
+      <categories>
+        <category>学习</category>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>数学</tag>
+        <tag>概率论</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CS基本素养</title>
+    <url>/posts/fc25f2a7/</url>
+    <content><![CDATA[<h2 id="体系结构及操作系统"><a href="#体系结构及操作系统" class="headerlink" title="体系结构及操作系统"></a>体系结构及操作系统</h2><p>学习计划：先将PA做完，在看jyy OS。</p>
+<h2 id="深度学习代码能力及相应的面经"><a href="#深度学习代码能力及相应的面经" class="headerlink" title="深度学习代码能力及相应的面经"></a>深度学习代码能力及相应的面经</h2><p>Kapathy的gpt mini</p>
+<p>手撕diffusion model</p>
+<p>跟着Phil Wang实现一些模型</p>
+<p>TensorRT及CUDA学习</p>
+<h2 id="机器学习进阶"><a href="#机器学习进阶" class="headerlink" title="机器学习进阶"></a>机器学习进阶</h2><p>学习计划：暂无</p>
+]]></content>
+      <categories>
+        <category>学习</category>
+        <category>计算机相关</category>
+      </categories>
+      <tags>
+        <tag>CS</tag>
+        <tag>Computer Science</tag>
+        <tag>Deep Learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++</title>
+    <url>/posts/5751eea2/</url>
+    <content><![CDATA[<h1 id="C-学习笔记"><a href="#C-学习笔记" class="headerlink" title="C++学习笔记"></a>C++学习笔记</h1><h2 id="学习路线"><a href="#学习路线" class="headerlink" title="学习路线"></a>学习路线</h2><p>第一阶段（预计时间下学期开学前）：在知识学习部分主要是看《C++ prime》和《Effective Modern C++》同时辅以《C++斯坦福读本》及其对应配套课程CS106L。实践部分主要是做CS106L的project以及CS106B|X的project。</p>
+<p>第二阶段（预计时间看情况而定）：看《力扣刷题指南》，先过一遍。再跟着代码随想录刷，再把hot100刷完。</p>
+<blockquote>
+<p>刷力扣的时候可能得先去复习一下数据结构及算法<span class="github-emoji"><span>😎</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
+</blockquote>
+<h2 id="C-prime-第一章-第三章（2024-11-22-2024-11-29）"><a href="#C-prime-第一章-第三章（2024-11-22-2024-11-29）" class="headerlink" title="C++ prime 第一章~第三章（2024.11.22~2024.11~29）"></a>C++ prime 第一章~第三章（2024.11.22~2024.11~29）</h2><p><strong>输入输出流</strong>：C++中没有像其他语言（例如python）中内建（build in）的输入输出语句，而是使用标准库来提供IO机制。iostream包含两个基本类型istream 和 ostream，分别表示输入流和输出流。同时标准库定义了4个IO对象，cin，cout，cerr，clog</p>
+<blockquote>
+<p>cerr相比于其他ostream相比，没有buffer。其他的cout或是clog为了提升程序的性能，因此存在一个buffer也就是当flush的时候才会输出。注意std::endl和return和cin都有这样的效果。</p>
+</blockquote>
+<p><strong>向流写入数据</strong>：使用输出运算符&lt;&lt;，该输出符返回一个ostream对象，因此&lt;&lt;可以连续使用。输入运算符&gt;&gt;同理</p>
+<p><strong>命令空间</strong>：命名空间是为了防止我们不经意的名字定义冲突，以及使用库中相同名字导致的冲突。标准库的所有名字都在命名空间里面。</p>
+<p><strong>文件结束符EOF</strong>：在while（std::cin &gt;&gt; value）的时候，只有遇见文件结束符这里才会显示假，从而退出while循环。</p>
+<figure class="highlight c++"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span>  </span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;  </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{  </span><br><span class="line">  cout &lt;&lt; <span class="string">"Hello World!"</span>;  </span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;  </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>学习</tag>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
+</search>
