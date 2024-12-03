@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>世界模型调研概念辨析</title>
+    <url>/posts/eac76465/</url>
+    <content><![CDATA[<h1 id="调研过程的概念辨析"><a href="#调研过程的概念辨析" class="headerlink" title="调研过程的概念辨析"></a>调研过程的概念辨析</h1><h2 id="Procedural-Content-Generation-PCG"><a href="#Procedural-Content-Generation-PCG" class="headerlink" title="Procedural Content Generation(PCG)"></a>Procedural Content Generation(PCG)</h2><p><strong>PCG</strong> 是 <strong>Procedural Content Generation</strong> 的缩写，中文通常翻译为程序化内容生成。它是一种通过<strong>算法和规则自动生成内容的技术</strong>，广泛应用于游戏开发、虚拟世界构建、影视制作等领域。简单来说就是使用算法创建数据而不是手动创建数据，这些数据是在运行的时候生成。在计算机图形学中，它通常用于创建纹理和 3D 模型。在视频游戏中，它用于自动创建大量游戏内容。其最初是由于硬件性能的限制，通过在运行过程中生成来减少游戏的大小等。根据实现方式，程序生成的优势可能包括更小的文件大小、更多的内容以及随机性，以实现更不可预测的游戏玩法。</p>
+<span id="more"></span>
+<p><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Dragon_trees.jpg/290px-Dragon_trees.jpg" alt="img"></p>
+<blockquote>
+<p>一个过程生成的例子，这里使用 L 系统生成逼真的树木模型。通过改变确定性和随机种子，可以生成不同的模型。</p>
+</blockquote>
+<h2 id="构建生态解决PCG范围"><a href="#构建生态解决PCG范围" class="headerlink" title="构建生态解决PCG范围"></a>构建生态解决PCG范围</h2><p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241128213351251.png" alt="image-20241128213351251"></p>
+<p>这里的类HuggingFace，其实是指像Huggingface或者Github或者DokerHub一样有完善的开源生态，也就有人源源不断地上传相应的PCG模块，来解决PCG功能单一的问题。同时利用LLM将需要复杂PCG能力的任务拆分成子任务，这样通过相应的PCG组合达到多样化的目的。</p>
+<h2 id="PCG-Hub"><a href="#PCG-Hub" class="headerlink" title="PCG Hub"></a>PCG Hub</h2><p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241128221828447.png" alt="image-20241128221828116"></p>
+<p>没找到但是大概可以理解就是有大量PCG模块的一个Hub，貌似来源于这篇文章<a href="https://simg.baai.ac.cn/paperfile/29268b5d-e309-4c5a-b8f8-dedecb96c741.pdf">CityX: Controllable Procedural Content Generation for Unbounded 3D Cities</a>。</p>
+<p>由于有标准的Agent可以理解的文档，因此可以使用LLM进行交互。</p>
+<h1 id="Neural-radiance-field-（NeRF）"><a href="#Neural-radiance-field-（NeRF）" class="headerlink" title="Neural radiance field （NeRF）"></a>Neural radiance field （NeRF）</h1><p>神经辐射场（NeRF）<strong>是一种基于深度学习的从二维图像重建场景三维表示的方法</strong>。NeRF 算法将场景表示为深度神经网络（DNN）参数化的辐射场。该网络预测给定相机在欧拉角（θ，Φ）中的空间位置（x，y，z）和观察方向下的体积密度和视依赖发射辐射。通过沿相机射线采样许多点，传统的体积渲染技术可以生成图像。</p>
+<ul>
+<li><strong>数据收集</strong>：一个 NeRF 需要为每个独特的场景重新训练。第一步是从不同角度收集场景的图像及其相应的相机姿态。这些图像是标准的 2D 图像，不需要专门的相机或软件。任何相机都能生成数据集，只要设置和捕获方法符合 SfM（从运动结构）的要求。</li>
+<li><strong>训练</strong>：对于每个稀疏视点（图像和相机姿态）提供的信息，通过场景中的相机光线进行行进，生成一组具有给定辐射方向（进入相机）的 3D 点。对于这些点，使用多层感知器（MLP）预测体积密度和发出的辐射。然后通过经典体积渲染生成图像。因为此过程完全可微分，可以通过多个视点的梯度下降来最小化预测图像与原始图像之间的误差，鼓励 MLP 发展一个连贯的场景模型。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>前沿技术探索</category>
+      </categories>
+      <tags>
+        <tag>人工智能前沿</tag>
+        <tag>世界模型</tag>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RF-Edit</title>
+    <url>/posts/c9358b1c/</url>
+    <content><![CDATA[<h1 id="Taming-Rectified-Flow-for-Inversion-and-Editing"><a href="#Taming-Rectified-Flow-for-Inversion-and-Editing" class="headerlink" title="Taming Rectified Flow for Inversion and Editing"></a>Taming Rectified Flow for Inversion and Editing</h1>]]></content>
+      <categories>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>diffusion model</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VideoDirector</title>
+    <url>/posts/c53df283/</url>
+    <content><![CDATA[<h1 id="VideoDirector-Precise-Video-Editing-via-Text-to-Video-Models"><a href="#VideoDirector-Precise-Video-Editing-via-Text-to-Video-Models" class="headerlink" title="VideoDirector: Precise Video Editing via Text-to-Video Models"></a>VideoDirector: Precise Video Editing via Text-to-Video Models</h1><p>先看看效果🤪</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/datadataimage-20241202194259030.png"></p>
+<p>效果感觉一般，以这个例子来看，其应该是对Tokenflow[^1]做的改进，应该也是用T2I模型在时空上做的操作，不过我感觉效果有限，再好也很难超过Tokenflow了。看看他怎么讲故事的<span class="github-emoji"><span>😄</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>。</p>
+<span id="more"></span>
+
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><blockquote>
+<p>Despite the typical inversion-then-editing paradigm using text-to-image (T2I) models has demonstrated promising results, directly extending it to text-to-video (T2V) models still suffers severe artifacts such as color flickering and content distortion.</p>
+</blockquote>
+<p>跟我想的没错，还是Inversion-base的方法，然后research gap还是由于将T2I的图像编辑方法拓展到T2V的视频编辑方法，会出现artifacts（伪影），例如色彩闪烁和内容失真。</p>
+<blockquote>
+<p>Consequently, current video editing methods primarily rely on T2I models, which inherently lack temporal-coherence generative ability, often resulting in inferior editing results.</p>
+</blockquote>
+<p>已经有很多方法是基于T2V做的了，（尽管在社区开源的T2V模型比较少）比如我之前的工作，比如UniEdit[^2]，VidToMe[^3]，AnyV2V[^4]。很难想象这是2024年底的文章。想错了其是用T2V模型做的<span class="github-emoji"><span>🤒</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f912.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>。其创新点是围绕时空这个research gap讲的，引言部分详细介绍。</p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
+<p>Notably, instead of using T2V models, current video editing methods are still built upon T2I models by leveraging inter-frame features [5, 12, 14], incorporating optical flows [3], or training auxiliary temporal layers [16].</p>
+</blockquote>
+<p>有很多工作是基于T2V做的了。</p>
+<blockquote>
+<p>As a result, these methods still suffer inferior realism and temporal coherence due to the absence of temporal coherence in vanilla T2I models. This raises a question: Can we edit a video directly using T2V models?</p>
+</blockquote>
+<p>他写文章的时候不调研一下的吗，11月份应该是投CVPR2025。之后的写法基本一致，其首先介绍在图像编辑的领域，通过Null-text Inversion和CFW能够做到无偏Inversion。再通过注意力操作实现编辑任务，但是直接将这样的方法利用T2V模型搬到视频编辑任务上就会导致闪烁和失真。并用了一张图来证明：</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241202202012463.png" alt="image-20241202202012463"></p>
+<blockquote>
+<p>图画的真好看，大有可为啊！</p>
+</blockquote>
+<p>同时在这张图上，作者分析了为啥图像编辑的Inversion加注意力的范式直接通过T2V移植到视频编辑是不可行的。</p>
+<blockquote>
+<p>错怪作者了，我以为是作者的主要工作就是将图像编辑的范式通过T2V移植到视频编辑了。但是实际上作者是说直接将想法移植是不可行的，因此其做了改进，那么这个改进就是创新点！</p>
+</blockquote>
+<p>主要是有两个原因：</p>
+<ol>
+<li>T2V模型时空紧密耦合在一起，就算是使用改进后的Inversion，还是会有重建偏差</li>
+<li>视频的时空布局太复杂了，而图像编辑的注意力操作没有办法完成这么复杂的操作，太复杂就会导致操作注意力的时候不同的时空Token进行干扰。</li>
+</ol>
+<p>最后，作者介绍了针对这些问题做的改进：</p>
+<ol>
+<li>通过一个解耦合操作，提供额外的时间线索。并且将null-text embedding 拓展到多帧的阶段去适应时间信息</li>
+<li>提出了一个自注意力操作去控制复杂的时空布局</li>
+</ol>
+<blockquote>
+<p>感觉就解耦合操作是作者自己的东西，其他好像都是其他文章的。自注意力在图像编辑的时候就有引出了，这么出名作者不可能不知道，感觉作者是将各种方法拼凑在一起，最后加了一个解耦合，但是创新点不够，因此这么写。</p>
+</blockquote>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241203193921703.png" alt="image-20241203193921703"></p>
+<p>改进1：</p>
+<p><strong>Muti-Frame Null-Text Embedding：</strong>将原本的空文本Embedding拓展一个维度：${φ_t}∈R^{F ×l×c}$，其中 $l$ 和 $c$ 分别代表序列长度和Embedding维度。</p>
+<p><strong>Spatial-Temporal Decoupled Guidance:</strong> 利用视频Inversion过程中的时间和自注意力特征来获得空间和时间的解耦合信号。</p>
+<blockquote>
+<p>这个解耦合居然也是来自其他文献的，逆天了</p>
+</blockquote>
+<p>时间一致性可以通过最小化时间注意力的特征图来获得，如下图公式所示：<br>$$<br>\mathcal{L}_T = \mathcal{M}<em>T^{f/b} \cdot \mathcal{M}<em>T \cdot |(\mathcal{T}</em>+ - \mathcal{T}</em>-)|_2^2<br>$$</p>
+<p>$$<br>\mathcal{G}_T^{f/b} = \frac{\partial(\mathcal{L}_T)}{\partial z_t}<br>$$<br>其中$\mathcal{T}$代表注意力map，$+$和$-$分别代表Inversion过程和Denoising 过程，然后$ \mathcal{M}_T$代表一个Mask将Map最后一个维度选择前top $K$个值。$\mathcal{M}_T^{f/b}$代表由SAM2获得的前景和背景mask。</p>
+<blockquote>
+<p>SAM2: Segement anything ，一个语义分割模型</p>
+</blockquote>
+<p>同时上式一并用在时空注意力上如下：<br>$$<br>\mathcal{L}<em>\mathcal{K} = \mathcal{M}<em>\mathcal{K}^{f/b} \cdot ||\mathcal{K}</em>+ - \mathcal{K}</em>-||_2^2<br>$$<br>$$<br>\mathcal{G}_\mathcal{K}^{f/b} = \frac{\partial(\mathcal{L}_\mathcal{K})}{\partial z_t}<br>$$</p>
+<p>因此可以获得时空解耦的梯度如下：<br>$$<br>\mathcal{G} = \eta_f \cdot \mathcal{G}_T^f + \eta_b \cdot \mathcal{G}_T^b + \zeta_f \cdot \mathcal{G}_\mathcal{K}^f + \zeta_b \cdot \mathcal{G}_\mathcal{K}^b<br>$$<br>前面的系数都是超参，具体使用这个梯度如下：<br>$$<br>\epsilon_\theta = \epsilon_\theta(z_t, c, t) + \omega[\epsilon_\theta(z_t, c, t) - \epsilon_\theta(z_t, \phi, t)] + \mathcal{G}<br>$$<br>注意这个$\omega$就是CFG，这个式子其实就是最经典的去噪公式，只是其后面加了一个处理后的梯度$\mathcal{G}$.</p>
+<p><strong>Attention Control for Video Editing</strong>：其实就是替换自注意力，将编辑分支的注意力替换为重建分支。然后其中也使用了SAM2生成的mask，具体公式如下：<br>$$<br>\widehat{Attn}=\begin{cases} W_t \cdot V_t^*, &amp; \text{if } t &lt; \tau_s, \ S\left(\frac{Q_t^* \cdot \hat{K}_t^\top}{\sqrt{d}} \otimes [1|\mathcal{M}^f]\right) \cdot \hat{V}_t, &amp; \text{otherwise.} \end{cases}<br>$$<br>然后还有他之前提的交叉注意力的操作：<br>$$<br>M_t^C=\begin{cases} C \cdot [\gamma \cdot (M_t^*) + (1-\gamma) \cdot (M_t’)], &amp; \text{if } t &lt; \tau_c, \ M_t^*, &amp; \text{otherwise.} \end{cases}<br>$$</p>
+<blockquote>
+<p>题外话，如果噪声预测部分是用DiT实现的话，不存在交叉注意了，怎么注入呢</p>
+</blockquote>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>数据也是自己收集的，prompt来自GPT和作者自己。使用AnimateDiff作为background，这个不错看看。</p>
+<blockquote>
+<p>Our method requires 8.5 minutes for pivotal tuning and 1 minute for video editing on a single A100 GPU.</p>
+</blockquote>
+<p>跑一个要快十分钟, 还是在A100上，这就是拼凑方法的坏处。</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241202213407941.png" alt="image-20241202213407941"></p>
+<blockquote>
+<p>远远不如我的工作，而且作者的所有例子都没有shape发生大面积更改的情况，因为他们用了mask，虽然对非编辑部分进行了保护，但是也最终导致了没办法进行shape编辑。</p>
+</blockquote>
+<h2 id="相关文献"><a href="#相关文献" class="headerlink" title="相关文献"></a>相关文献</h2><p>[^1]:Geyer, Michal, Omer Bar-Tal, Shai Bagon和Tali Dekel. 《TokenFlow: Consistent Diffusion Features for Consistent Video Editing》. arXiv, 2023年11月20日. <a href="http://arxiv.org/abs/2307.10373">http://arxiv.org/abs/2307.10373</a>.<br>[^2]:Bai, Jianhong, Tianyu He, Yuchi Wang, Junliang Guo, Haoji Hu, Zuozhu Liu和Jiang Bian. 《UniEdit: A Unified Tuning-Free Framework for Video Motion and Appearance Editing》. arXiv, 2024年2月23日. <a href="https://doi.org/10.48550/arXiv.2402.13185">https://doi.org/10.48550/arXiv.2402.13185</a>.<br>[^3]:《VidToMe_Arxiv.pdf》. 见于 2024年4月13日. <a href="https://vidtome-diffusion.github.io/VidToMe_Arxiv.pdf.Ku">https://vidtome-diffusion.github.io/VidToMe_Arxiv.pdf.Ku</a>, Max, Cong Wei,<br>[^4]: Weiming Ren, Harry Yang和Wenhu Chen. 《AnyV2V: A Plug-and-Play Framework For Any Video-to-Video Editing Tasks》. arXiv, 2024年3月21日. <a href="https://doi.org/10.48550/arXiv.2403.14468">https://doi.org/10.48550/arXiv.2403.14468</a>.</p>
+]]></content>
+      <categories>
+        <category>论文笔记</category>
+      </categories>
+      <tags>
+        <tag>diffusion model</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机器学习</title>
+    <url>/posts/498ab7d9/</url>
+    <content><![CDATA[<h2 id="概率图模型"><a href="#概率图模型" class="headerlink" title="概率图模型"></a>概率图模型</h2><p>概率图模型，简称图模型，是指用一种用图结构描述多元随机变量之间条件独立关系的概率模型，从而给研究高维空间中的概率模型带来了很大的便捷性。对于一个K维随机变量$X=[X_1,X_2,\cdots,X_K]^T$，其联合概率为高维空间中的分布，一难以直接建模。</p>
+<blockquote>
+<p>在不做任何独立假设条件的情况下，需要$M^K-1$的参数才能表示其概率分布</p>
+<p><strong>为什么需要  $M^K - 1$  个参数？</strong></p>
+<p>对于一个 ( $K$) 维离散随机向量 $\mathbf{X} = [X_1, X_2, \cdots, X_K]^T$，假设每个变量 ( $X_i$ ) 有 $M $个可能取值，则联合概率分布需要 $M^K $ 个概率值来完全描述所有可能的取值组合。然而，由于概率分布需要满足归一化约束（所有概率之和为 1），因此只需要 ( $M^K - 1$ ) 个独立参数即可描述整个分布。</p>
+</blockquote>
+<span id="more"></span>
+
+<p>为了减少联合概率建模的参数量，首先可以将一个$K$维随机向量$X$的联合概率分解为$K$个条件概率的乘积：<br>$$<br>p(x) \triangleq P(X = x)= \prod_{k=1}^K p(x_k|x_1,\cdots,x_{k-1}),<br>$$<br>其中$x_k$代表变量$X_k$的取值，如果某些变量之间存在条件独立，其参数量就可以大幅减少。当概率模型中的变量数量比较多时，其条件依赖关系也比较复杂．我们可 以使用图结构的方式将概率模型可视化，以一种直观、简单的方式描述随机变量 之间的条件独立性，并可以将一个复杂的联合概率模型分解为一些简单条件概率模型的组合。</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241202134344599.png" alt="image-20241202134344599"></p>
+<p>图结构的三个基本问题：（1） 表示问题 （2）学习问题 （3）推断问题。</p>
+<h3 id="模型表示"><a href="#模型表示" class="headerlink" title="模型表示"></a>模型表示</h3><p>图由一组节点和节点之间的边组成。在概率图模型中，每个节点都表示一 个随机变量（或一组随机变量），边表示这些随机变量之间的概率依赖关系。常见的概率图模型可以分为两类：有向图模型和无向图模型。</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241202134803019.png" alt="image-20241202134803019"></p>
+<h4 id="有向图模型"><a href="#有向图模型" class="headerlink" title="有向图模型"></a>有向图模型</h4><p>有向图模型也称为贝叶斯网络或信念网络，是一类用有向图来描述随机向量概率分布的模型。贝叶斯网络，对于一个$K$维随机向量$X$和一个$K$个节点的有向非循环图$𝐺$，$𝐺$中的每个节点都对应一个随机变量，每个连接$𝑒_{𝑖𝑗}$表示两个随机变量$𝑋<em>𝑖$和$𝑋_𝑗$之间具有非独立的因果关系．令$𝑿</em>{𝜋𝑘}$ 表示变量𝑋𝑘的 所有父节点变量集合，$𝑃(𝑋<em>𝑘|𝑿</em>{𝜋𝑘} )$表示每个随机变量的局部条件概率分布。如果$X$的联合概率分布可 以分解为每个随机变量$𝑋<em>𝑘$的局部条件概率的连乘形式，即<br>$$<br>p(\boldsymbol{x}) = \prod</em>{k=1}^{K} p(x_k|x_{\pi_k}),<br>$$</p>
+<blockquote>
+<p>这个公式可以由上式中条件概率分布推导出联合概率分布得出。上述的$(G,X)$构成了一个贝叶斯网络。</p>
+</blockquote>
+<p><strong>条件独立性</strong>：在贝叶斯网络中，如果两个节点是直接连接的，它们肯定是非条件独立的，是直接因果关系，父节点是因，直接的是果。</p>
+<p>如果不是直接连接的，则情况较为复杂如下：</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241202140827258.png" alt="image-20241202140827258"></p>
+<p>这四种关系分别为：（1） 间接因果关系 （2）间接果因关系 （3）共因关系 （4）共果关系</p>
+<blockquote>
+<p>这四种关系比较抽象，以一个例子来说明：</p>
+<p>共因关系是指两个变量（$𝑋_1$和$𝑋_3$）都受到同一个变量（$𝑋_2$）的影响，其中$𝑋_2$被称为”共同原因”或”共因”。</p>
+<p>这种关系有两个重要特征：</p>
+<ol>
+<li>当我们不知道$𝑋_2$的情况时，$𝑋_1$和$𝑋_3$之间会表现出相关性（不独立）</li>
+<li>但当我们知道了$𝑋_2$的值后，$𝑋_1$和$𝑋_3$就变成条件独立的了</li>
+</ol>
+<p>举个实际例子：</p>
+<ul>
+<li>$𝑋_2$是天气（晴/雨）</li>
+<li>$𝑋_1$是人们带伞的情况</li>
+<li>$𝑋_3$是地面是否潮湿</li>
+</ul>
+<p>如果我们不知道天气情况（$𝑋_2$），看到有人带伞（$𝑋_1$）就能推测地面可能潮湿（$𝑋_3$）。但如果我们已经知道天气情况（$𝑋_2$），那么人们是否带伞（$𝑋_1$）就与地面是否潮湿（$𝑋_3$）没有直接关系了，它们都只是受到天气的影响。</p>
+</blockquote>
+<p><strong>局部马尔科夫性：</strong>对于一个更一般的贝叶斯网络，其局部马尔科夫性质为：每个随机变量在给定父节点的情况下，条件独立于它的后代节点。</p>
+<p><strong>常见的有向图模型</strong>：很多经典的机器学习模型可以使用有向图模型来描述，比如朴素贝叶斯分 类器、隐马尔可夫模型、深度信念网络等。</p>
+<p><strong>sigmoid信念网络</strong>：为了减少模型参数，可以使用参数化模型来建模有向图模型中的条件概率分布，而sigmoid信念网络是一种简单的参数化模型。sigmoid中的变量取值为${0,1}$，对于变量$X_k$，和它的父节点集合$\pi_k$，其条件概率分布表示为:<br>$$<br>p(x_k = 1|\mathbf{x}<em>{\pi_k}, \theta) = \sigma(\theta_0 + \sum</em>{x_i \in \mathbf{x}_{\pi_k}} \theta_i x_i),<br>$$<br>其中$\theta$为可以学习的参数，$\sigma$是Logistic函数，假设变量$X_k$的父节点数量为$M$，使用表格的参数为$2^M$而使用sigmoid信念网络只需要$M+1$个参数。值得一提的是，Sigmoid信念网络与Logistic回归模型都采用Logistic函数来计算条件概率．如果假设Sigmoid信念网络中只有一个叶子节点，其所有的父节点之间没有连接，且取值为实数，那么Sigmoid信念网络的网络结构和Logistic回归模型类似。但是，这两个模型的区别在于，Logistic回归模型中的$𝒙$作为一种确定性的参数，而非变量． 因此，Logistic回归模型只建模条件概率$𝑝(𝑦|𝒙)$，是一种判别模型；而Sigmoid信念网络建模联合概率$𝑝(𝒙,𝑦)$，是一 种生成模型．</p>
+<p><strong>朴素贝叶斯分类器</strong>：其是一种简单的概率分类器，在</p>
+]]></content>
+      <categories>
+        <category>学习</category>
+        <category>计算机相关</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>人工智能</tag>
+        <tag>概率图模型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>概率论学习</title>
+    <url>/posts/c3185712/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">概率论只不过是把常识归纳为计算问题．
+——皮埃尔-西蒙·拉普拉斯（Pierre-SimonLaplace）</blockquote>
+## 学习起因
+
+<p>学diffusion model的时候看不太懂公式，发现我学概率论已经是大二2021年的事情了，基本上忘了个精光，故重新学习。此外我发现一个有趣的网站（<a href="https://probability.visualized.fun/">看见概率论 - 通过交互式演示理解经典概率论定理</a>）因此开个新贴，学习一下。</p>
+<h2 id="大数定理：概率的收敛之美"><a href="#大数定理：概率的收敛之美" class="headerlink" title="大数定理：概率的收敛之美"></a>大数定理：概率的收敛之美</h2><blockquote>
+<p><em>“人生就像一场大数定理实验，重要的不是单次的成败，而是坚持到收敛的那一刻。 记住 ——*<em>样本量不够，就往死里试！</em></em>“*</p>
+</blockquote>
+<h3 id="1-核心思想"><a href="#1-核心思想" class="headerlink" title="1.核心思想"></a>1.核心思想</h3><p>大数定理告诉我们：随着试验次数的增加，样本的平均值会越来越接近理论期望值。<br>$$<br>样本均值 → 理论期望值（当n→∞）<br>$$</p>
+<ul>
+<li>试验次数较少时，平均值波动较大</li>
+<li>随着次数增加，平均值会稳定在期望值附近</li>
+<li>这种收敛性为统计推断提供了理论基础</li>
+</ul>
+<p>特点：</p>
+<ol>
+<li>随机性，每次试验的结果都是随机的，无法准确预测</li>
+<li>独立性，每次试验相互独立，不受之前的结果影响</li>
+<li>收敛性，大量重复之后，平均值趋近于理论期望值</li>
+</ol>
+<h3 id="2-实验"><a href="#2-实验" class="headerlink" title="2. 实验"></a>2. 实验</h3><p>看见概率论中准备了三个实验，分别为骰子实验，硬币实验，随机抽样</p>
+<ul>
+<li><h4 id="骰子实验"><a href="#骰子实验" class="headerlink" title="骰子实验"></a>骰子实验</h4><p>实验目标：</p>
+<ol>
+<li>验证多次投掷骰子的平均值会收敛到3.5 (1+2+3+4+5+6)/6</li>
+<li>观察收敛速度与试验次数的关系</li>
+<li>理解随机事件的独立性原理</li>
+</ol>
+<p>观察重点：</p>
+<ol>
+<li>绿色线表示每次投掷的实际点数</li>
+<li>蓝色线表示到目前为止的平均值</li>
+<li>红色虚线表示理论期望值3.5</li>
+</ol>
+<p>预期现象</p>
+<ol>
+<li>开始时平均值（蓝线）波动较大</li>
+<li>随着投掷次数增加，平均值会逐渐靠近3.5</li>
+<li>单次投掷（绿线）始终在1-6之间随机波动</li>
+</ol>
+<p>实验现象</p>
+<p>当试验次数为10：</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130230622385.png" alt="image-20241130230622385"></p>
+<p>当试验次数为100：</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130230701406.png" alt="image-20241130230701406"></p>
+<p>当试验次数为1000</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130230747132.png" alt="image-20241130230747132"></p>
+<p><strong>实验结论</strong>：</p>
+<ul>
+<li>单次投掷结果完全随机，但大量重复后会呈现稳定规律</li>
+<li>试验次数越多，平均值越接近理论期望值3.5</li>
+<li>这种收敛性质正是大数定理的完美体现</li>
+</ul>
+<p><strong>启示思考</strong>：</p>
+<ul>
+<li>统计规律需要大量样本才能显现</li>
+<li>小样本的结果可能会产生较大偏差</li>
+<li>概率不能预测单次结果，但能预测长期表现</li>
+</ul>
+</li>
+</ul>
+<h2 id="贝叶斯定理：概率推理的艺术"><a href="#贝叶斯定理：概率推理的艺术" class="headerlink" title="贝叶斯定理：概率推理的艺术"></a>贝叶斯定理：概率推理的艺术</h2><blockquote>
+<p><em>“人生就像一场贝叶斯更新，每一条新信息都是一次概率革命。不过最重要的是 ——*<em>先验概率不重要，重要的是不断更新！</em></em>“*</p>
+</blockquote>
+<h3 id="1-核心思想-1"><a href="#1-核心思想-1" class="headerlink" title="1.核心思想"></a>1.核心思想</h3><p>贝叶斯定理帮助我们在获得新信息后更新判断。它告诉我们如何根据新的观察结果， 科学地调整我们对某件事的认知。</p>
+<p>贝叶斯公式：<br>$$<br>P(A|B) = P(B|A) × P(A) ÷ P(B)<br>$$</p>
+<p>已知变量：</p>
+<ul>
+<li>P(A) - 先验概率：在获得新证据前的初始判断</li>
+<li>P(B|A) - 似然度：在A发生的条件下，观察到B的概率</li>
+<li>P(B|¬A) - 似然度：在A不发生的条件下，观察到B的概率</li>
+</ul>
+<p>需要计算的变量：</p>
+<ul>
+<li><p>P(B) - 全概率：观察到B的总概率</p>
+<p>= P(A) × P(B|A) + P(¬A) × P(B|¬A)</p>
+</li>
+<li><p>P(A|B) - 后验概率：观察到B后，对A的更新判断</p>
+<p>= P(B|A) × P(A) ÷ P(B)</p>
+</li>
+</ul>
+<ol>
+<li>先验概率</li>
+</ol>
+<p>在获得新证据之前，基于已有经验和背景信息的初始判断</p>
+<ol start="2">
+<li>似然程度</li>
+</ol>
+<p>新观察到的证据对不同假设的支持程度</p>
+<ol start="3">
+<li>后验概率</li>
+</ol>
+<p>结合新证据后得出的更新判断</p>
+<h3 id="2-实验-1"><a href="#2-实验-1" class="headerlink" title="2.实验"></a>2.实验</h3><p>下雨概率：<br>$$<br>P(下雨|地面湿) = P(地面湿|下雨) × P(下雨) ÷ P(地面湿)<br>$$<br>已知变量：</p>
+<ul>
+<li>P(下雨) - 先验概率 P(R)<ul>
+<li>• 来源：根据天气预报、季节特征等预判</li>
+<li>• 含义：在观察地面之前对是否下雨的判断</li>
+</ul>
+</li>
+<li>P(地面湿|下雨) - 似然度 P(W|R)<ul>
+<li>• 来源：经验数据或实地观测</li>
+<li>• 含义：在下雨的情况下，地面变湿的概率</li>
+</ul>
+</li>
+<li>P(地面湿|不下雨) - 似然度 P(W|¬R)<ul>
+<li>• 来源：经验数据或实地观测</li>
+<li>• 含义：在不下雨的情况下，地面变湿的概率（如清洁、洒水等）</li>
+</ul>
+</li>
+</ul>
+<p>需要计算的变量：</p>
+<ul>
+<li>P(地面湿) - 标准化常数 P(W)<ul>
+<li>• 通过全概率公式计算：P(W) = P(R) × P(W|R) + P(¬R) × P(W|¬R)</li>
+<li>• 含义：地面变湿的总概率，包括下雨和不下雨两种情况</li>
+</ul>
+</li>
+<li>P(下雨|地面湿) - 后验概率 P(R|W)<ul>
+<li>• 最终目标：通过贝叶斯公式计算</li>
+<li>• 含义：观察到地面湿润后，对下雨概率的更新判断</li>
+</ul>
+</li>
+</ul>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130233452258.png" alt="image-20241130233452258"></p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130233505405.png" alt="image-20241130233505405"></p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130233516515.png" alt="image-20241130233516515"></p>
+<p>也就是说贝叶斯公式是通过证据来更新先验概率。第一次弄懂了具体含义。。。</p>
+<p>如果新来的证据的似然度都一样的话，那这个证据是完全无用的，也就是不会更新概率。</p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130233652239.png" alt="image-20241130233652239"></p>
+<p><img data-src="https://raw.githubusercontent.com/yangkunl/image_hosting/main/dataimage-20241130233747460.png" alt="image-20241130233747460"></p>
+]]></content>
+      <categories>
+        <category>学习</category>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>数学</tag>
+        <tag>概率论</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CS基本素养</title>
+    <url>/posts/fc25f2a7/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="输错了喔，再看就不礼貌了&#128527;." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="5c8756393b5e818ce6472a16e0b153c281d8c9f550fb31ab40cc02d62d1e5b07">71ac3a7dbd8f1d370fe2d2f53c446fb979694eb198f296ecc7559d07187131dd110feb1b9ffde19b2f323635b9986592037b853f79e089b5082daa671d0b071bf070b5cab7540ccbc171c9f75f3bc2ee8a691f8cf02b084839037956530929c8ffab0e960826e726254fdb51d798388162468cf2190da7eba6788d0fa8c7a14943c306479bf981e5ed040768c22c675713a022d51e96c2816babd706b7081aa4030a9e0b369d1600538451f60452e7ca680b6b5be9815d52c3bdfd57c6590d934a6666ce6f711ce2ab2f2d60ffe68c9a2dce8b82bfc66f3c3d7e887b7121206cc4ef82f6bcd6d6ad13b7248e70877ec3d26564dcd861128e249526eaba7c5d92d079403445591a98227ccfb60e71dd4e3a56e96843f6d9606e26de0a07dec7e7400d93e828d3b5461e42a6302536f76981d09aa68a6c367350a65eca54cc4f10db1f4a14b492fd15152fbe889837709af39b01587faf38a410babc34ff289d0ede6b50aa2dae6613b8cac7c4fac03955ce5046a52ab7d6ea9516efa1d214685dd88c124444ac1bfca89651bd9f3a8a3d7c1354524dbef3a0c54766f66e8b604134f2964404a87011c4a8f6cc544b9b9645f22632bbd57fd7e95ecaa6855aadd6f4250b13bc6027fab579ef126ff3c1539d51a79606df9f44ce59a1148a8ad0fb7b9e12646b72c9f07c69251b453ff257b07015d2b6d8c06957a00f23fb7b1a90e3e5b83964b5f116eebf51f1b78e5ea3ff460c666aa1d20c5761fcaa14c9732825b782db2e21c55d62ccef64d84de0bfb4d6c2e3bb9bbb7f566f11ae52f62214a76e27ac2aacdfc832111a3603ae43299d1d8a7f2f86200a6f0a272df1a7fa260a978cc34beb8b569936e6becd4bbf3693f64829a2d26739f02814199f0a0463e54917bcb45953cce0198f5a58e38a1979e97ca6c6173e04a456270fc3c701827ea4739ac7dcc652ed395b083843a968dbd7df6f2bfc4cf846f019651a47cfaf3b08648c3103f6f89866df7b647aeb3e8bd8541279703223bf6d08130cd9e514ec438dca6098a81d12e6cacf5ba35ad7305401afaa4eb7244b8ab8206bf1c515dd4f69553334e7b82219a56b43ae7132</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey,你需要输入密码.&#128512</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <categories>
+        <category>学习</category>
+        <category>计算机相关</category>
+      </categories>
+      <tags>
+        <tag>CS</tag>
+        <tag>Computer Science</tag>
+        <tag>Deep Learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++</title>
+    <url>/posts/5751eea2/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="输错了喔，再看就不礼貌了&#128527;." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="371d9e714c660263bae605eebb75d14a818a3720df1fd69b0bcada650d41e081">71ac3a7dbd8f1d370fe2d2f53c446fb9946ad5a1428b8cfedb38efac8dcc1f4fb13b375602467209f91419bf3257d3e0992f837cd27b629a4694637f1835b93f52ca21e4b07895afe5acee1d838c92cb067d786dcd0c553fb9fc9a1d90dbcf91410482e66853e52e282df710414ac342b0af2705cfaa47a22b3ecce09eaf031c54839398a71dc6cefb51a210f70a9768bd77fe0fc8f58f6bb4181f2dbb7d8e21ae8b857f58a25d5f54b98721d2cb3d7691fbb5d38a8016f2b5a1b29a4de319efec5d07d9f8e3a9797b43b456567cba90fc089b99e1e93d720a97fdbb64befcdbdfc8e089573c325555f346d0f3d3eba1336aa797b72fab24fa36f61ef4d13017b20815e1a08f85db97addb9355045328cce90f7496438b380886051a9fb3039004b76183b80ebe7ad8bb98a3bfa1fb2f65ce3ee8b1e0be88d2db5ffa14f7a9a79c401ab608440e9aa8f2b2d594b9ce53022e4424f7be60d50490810cb1598a203e6e428d99c9f7ead4dda4d04abd8bec5b9b5fd19c98789f248b993e94e69b8377eedfe74282209e68a9bdd95a5bab085cc3e5ea3868cdec42aaeae6eee0300b5459027fa260e6538f6855d3d03e80aa7ec206f64ea150c47b6e7b489a7d3864a009c69a324244a9f048c8d4cd21296f7b432f2c1278b69896ae3c4b87bcc26009c5611768f24d1b8f19f6c42316788c86779331fd86cbcc81a12041b182759e39fa88bc0fc5a23e43e9f618b6ba5ce23e5d7b184638d2eff106655790d8132ffb5ebfc48c28c733845c9fed2cd933aa9f8f920b537b8e2a54653903c7ba9c1444e2f5c1b77abd319446538902a2712caecc5565935a859cd4b2a94a8136ebcf5df2e214bdd13b427dff973bfddc0263822202549e7cd5cd3af234f874918f0a80c4c43b897eb862c60e1c7acd5ba78819a5ad84a1da81722c4a0ae67a8f54183199afb4ff125c713d9fc5d688945f963831d257a3fd108c770326a2be50ce808983fe677b3329a3697aa07283e9611d9b35116280eec86a4e956432f6d4910f4d7877794a9e51032c2774a438a1d1a666fe2a0a72bec9a22eaa2dab85a62d10aa1ed81d790be2be2c12b41b3887448417e813517af952dd04e768f8f47592424a218ef7aa2da13ae27086b0d02c6f4ddd3555e7619bea6d5349ed29f9d8a8f9682c84c5df06b98a12661488c38cb7b07b324c9e09fabefb401a44bdabb9e8bbb8a5d9d106048b2a020895e4503d335a39b1e01ba116aacc3a45eebdac8084e9a00d2d6aa20413cce62da8bf5a11f2e6f552b1468912be2b41e14d68a127712751c4ce8192cba193dd50c1900d3f992e75024d3c84b160d44455b067cae4e92e2ba148f8a44948195bcbe2f9dedfb3877e6bfdd4d2a30080482ef853c87d045788475997ffc290b788b1c731ea47ab01f4c840536fcbf1c6c863d5479a2ae862618e7af9f392ab6c2d3244b3c1615388d4b621025da08da8a7ad55da4c6f4777b4039b47ca9a0121568d20fee2bd26f3c20e02536b023aa3db8732c8e7496ff1216bb206030ba847ef5d3140da33bea1d7d4f9ba446a6b577e85b1cdbd999c51eabac61529f28b32d6e8d124caf12d4896ae3f72283814a941e8b8db4d188f5e92f28e061890fcf100fb172a58e6d3e56d31fa4c3fd95b1346e3438d967ed3bdee172e544d4cbf049c43a600e336d8c03594b17caf4d621262171f46c0b0e034ea901e725e9135d6103341071aff7d6cf063f85cb1eab52bb71402531ccd9f81b5a5affff412c424cd5bc59a027258dc9d4aee12a78f45e33f6ef57ceeb1c93387efb10171d1509368e1f39dde1467eb2a0a5e31fb073c1b6ad87b0e798c647d6a25e40c3ae89d3f0dd7f53de150b055283eb041c00b86eb6edff52ebc1b9d6ad9cbe9a027e4301042ba7d6405da9403dc52836d2c7cd5667fe8af711e086ecefc9aa077de9371ed13087ce91e4e46b293ad2704e2266083a4711eec201ed91b1e51558b91738e7e28095c146da05288744f67f060ec3c638ade9ff4117bce59eb56378b48b18be774eb6e4a872f17ab696f231668a53791cb99c0bf22147a88e72f68e7cd21588999316bdfdc81aa6ac49f3c13d2e4684b17afe534d5e81233cca790f83c18c9d7aeddab015c895ca82223996c69f751e39e69fd90fd9b904115b6eb4c2fcfd0de0cf32395ab0631c3fe90c983b52191e5f965b863a2be79f1631bf0ad81a62a3063f225065a27f7f2a81af41a32ed73ea7683f9989d264ea03c1af6ed116e2f4a852a83a0f47f1548c079c5036869efc6e459c8c5872d1e3436ea8a98d3805dae8fda2987457c5003223e31e9a682872d4410cfa4b60d4f3c8c2ecfdfc4317ebd2f9741ebba07331d311e26a49d17049a8ddbc83c15800b4f226f8b69bd45a83583f16ab9c6913276bdd8fad64254b7ecd5275bc6d457219863a45eda2a9278d4d7264124b4625a84e7b80d0e8c7cb6a2dec0797478353f7daba2203cd242e267d01a7dd248db944cfaf628a70d9dd661652768d4df237ed2e724faab33c74aaaeb9f8003fd511be0cd0fc0876919b7c00137fc7fd4f70657b192c7bd0af28b90de6c82baf28ed695d4c4896bae70696920e28029f31216a2ea1118a0a89a305a2a514c031050ed07a0f4aef162313616929082eb62563d2f8fd455f8f209a225af8a369040abc85204288579dd9462ae4b5609c2b11975e1a46490654da5273cf7a2a1c328ac4591527fa91fe07af02835be326b6774c4852d4691c2b2ac2d419d85bbe359c262d4bb073ee21b251535c167d5da97be458e4c60a787c1b5df530a5cb8b5100bdf6660497bee68a3221a86de844b1c0e4a6471c7b69759349723180162a1cfab1cbd3edf71725a103601d5e6d71df8c5014be68eb20f0dd65c7ca9e8e5a32b5de6d7b81eeb84d8eebcb0df0711f6eee95d0bab411ce0295f4139268892b6efc313c4a10c4924796f23ab3a4ab40b6bab4835032799fa9621bdb08bc9e18ffa2011a94cd691faca330150320cc92ba8df7a3320a47ce1a2e28a230b3b3d3825f90ac843d257375d789d01a2e6d0ef5fdc9d266579455b00a1ac7da5b5b54d79def9a073636d22d193b42278aa37cd6844870542d4635ccc27c0044fbd729ca02a3f0cc6c0b515a88316fdf5538d6ec106b61086e2a911487d8edd869018fe90e41bdcc4becc4072bc57088b1aa8502196be608cde9b727d434384ead85ca81eb37d100efd983abf72b2de858abb3271e97c05f8a8a9caea4e4bd1b10cbad9788e959d84ae4c807c0c482c01d8a88a6871d9dd23de449c4b3292ab4d0a201fed97a04883c556ddcc00447d27e337d5ae401bcd8a89566fda88fe816b6bf05f716ba6e86142cc59e93dc65766b788ad47b37d5a0530067b4237b6cbbe51e380b1dacf0cc925d4b0baa4e2d41f3b633f9ab916dbcd76d05079ec54df960b26094941c45a8b52d61f6dfde0b5882a3f0bf697e0ddeff3e648903e38d8584f4846ea4c8d9958de58d499c5409723c056c76c4f0e5a1bd2cbfac066541534632cd301d6e37be40aa612264ecf8f2b8f773ffca2051e130a33c13a58181b6fab367fdac6b4e1ed2a4ed97be4b253282445fa057aac2a9509e76ebb8accde3f706b7b03939968ab7dbaf71abd7df65b9fc6f136b0ad169d6e86ce1128957d5393d1ea339e6a1bf292b1792281b27e64fa4597f7b2e3d684279cecaa9abaca46f2fae0bb974b13ebc775c2c1163173cfacfcf62e065f550193987c7aab504a382c7b043f8339a89e3cb0bedef2adc2d54e2ecad66edb83a05e8c959fde0023903df5042b0755911af8449efc31b7fc3ed48c00b87183dc7eecce763b79bab143faf86e59212d761772a26fc35372c1c75d12ef38f35ea6d28f1c471440c92f056de986e01f2fa2a1083ebde22c929387316797a52549e4cbb9cc1c7421f0eeffb6c139a2a18ff02bbc8f58a25854974603ab814742b43387ea291fb23b872561c21aacacaf4cc6689631df355c000c22e9e2644781d64e5b7f3e44f430921c8af5af98aa880d644362da7bcbb4e122950aa65725e40834482712d595db3be6af40a9cbb312506d9077bd966cf2ea0bee9cf4ffa513f5b5de049ae4e867867db6bdc43fbd4ebcde9251e4ab47f1463bc567e61c9e295b5c7f30d75e6b02294cd0e8fd11e53fecdefa0caf57df485625c33364c38c731b139aa66031e843a94aa2a13f35b35ad8cc25ee7f5360ff29da813f413ad3b8df6d22f95272ef2d0b8608c5cf53a9e94158def2e689c9d1a9288bb1ea85ba0baca9fa605ec5122a4f0be27fb46d9f316acab2e136b42d8f6ae45d2effbb8aef333eb5b30c2ae9f3b7441d819894ce4d8b76669e213d382ff88be1534d44a4187fe63e5b4af1cb99e420b7f4d490c036e0f67aeaa1424343723ca624d87ee7ff614eb51bc75fe80128dcfc670d39582e7d8be890e014aec176a84b330da5bd1f0b17301678a6cac8d0a2f6335b45c79f342fd644b25c4a2be8bdfe82b3b62093884feb7b2127b603bea8f2c5c6abe9275177462ff863933fae5720ec84ac51758b576800a97b3c8ae818817956c3ce1961571ad8bbcf3753ed8bf1b31dfa144263f2ccc206498cd893aecaf566dd4e14927f858c10bf982483843dadddf396cb26489e2673450027aa4e96b30b5afe0658df616f29cb80f53fb803d3030064262b0f09dea16fe3d8f7ad3d4338d0f28c32c14f483e1a3abc2baa8f51b507ae9c5310a8b317499ea64e54d271b8ec83ec28dfcff470ab878901dfa768a5e20ad271e3f26a53336ba633ff84283e6fae1a0797371621107c67c853b7cb12fa4b4a5030e867c96e7a05891065dc22ccb5bd3a47a4046049dea84008aec4a796b1b9df3ec9b9c2ae7d423a12941fc3a6f1caf163</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey,你需要输入密码.&#128512</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>学习</tag>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
+</search>
